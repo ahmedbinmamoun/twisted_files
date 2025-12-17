@@ -1,4 +1,4 @@
-class AppAssest {
+class AppAssests {
 
   // icons
   static const String audioFileIcon = "assets/icons/audio_file.png";
@@ -9,10 +9,12 @@ class AppAssest {
   static const String notesIcon = "assets/icons/notes.png";
   static const String oldDetectiveIcon = "assets/icons/old_detective.png";
   static const String suspectIcon = "assets/icons/suspect.png";
+  static const String infoIcon = "assets/icons/info.png";
 
 
   // images
   static const String splashImage = "assets/images/splash.png";
+  static const String backgroundImage = "assets/images/background.png";
 
 
   // stikers

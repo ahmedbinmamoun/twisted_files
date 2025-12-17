@@ -4,6 +4,21 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class AppStyles {
+  static TextStyle largeButtonText = GoogleFonts.cairo(
+    fontSize: 30.sp,
+    fontWeight: FontWeight.bold,
+    color: AppColors.scenderyColor,
+  );
+  static TextStyle mediumButtonText = GoogleFonts.cairo(
+    fontSize: 24.sp,
+    fontWeight: FontWeight.bold,
+    color: AppColors.scenderyColor,
+  );
+  static TextStyle logo = GoogleFonts.changa(
+    fontSize: 40.sp,
+    fontWeight: FontWeight.bold,
+    color: AppColors.blackColor,
+  );
   static TextStyle largeTitle = GoogleFonts.cairo(
     fontSize: 24.sp,
     fontWeight: FontWeight.bold,
