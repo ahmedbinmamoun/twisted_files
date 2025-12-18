@@ -26,7 +26,9 @@ class PrimaryCard extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: 20.h,),
-              Image.asset(icon,width: 50.w,height: 50.h,),
+              Image.asset(icon,
+              // width: 50.w,height: 50.h,
+              ),
               SizedBox(height: 15.h,),
               Text(text,style: AppStyles.largeButtonText,),
             ],

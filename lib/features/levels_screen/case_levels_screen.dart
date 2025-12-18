@@ -6,8 +6,8 @@ import 'package:twisted_files/core/constants/app_style.dart';
 import 'package:twisted_files/core/navigation/app_routes.dart';
 import 'package:twisted_files/features/common/widgets/primary_card.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class CaseLevelsScreen extends StatelessWidget {
+  const CaseLevelsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,19 +21,19 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: 120.h,),
-                Text('Twisted Files',style: AppStyles.logo,),
+                Text('CASE LEVEL',style: AppStyles.logo,),
                 SizedBox(height: 120.h,),
                 PrimaryCard(
-                  icon: AppAssests.folderIcon,
-                   text: 'CASES FILES',
-                   onPressed: () {
-                     Navigator.pushNamed(context, AppRoutes.levelsScreen);
+                  icon: AppAssests.oneStarIcon,
+                   text: 'EASY CASES',
+                   onPressed: (){
+                    Navigator.pushNamed(context, AppRoutes.caesesListScreen);
                    },
                    ),
                 SizedBox(height: 20.h,),
-                PrimaryCard(icon: AppAssests.infoIcon, text: 'ABOUT'),
+                PrimaryCard(icon: AppAssests.twoStarsIcon, text: 'MEDIUM CASES'),
                 SizedBox(height: 20.h,),
-                PrimaryCard(icon: AppAssests.oldDetectiveIcon, text: 'PROFILE'),
+                PrimaryCard(icon: AppAssests.threeStarsIcon, text: 'HARD CASES'),
               ],
             ),
           ),

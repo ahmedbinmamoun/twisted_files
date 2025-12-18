@@ -10,6 +10,9 @@ class AppAssests {
   static const String oldDetectiveIcon = "assets/icons/old_detective.png";
   static const String suspectIcon = "assets/icons/suspect.png";
   static const String infoIcon = "assets/icons/info.png";
+  static const String oneStarIcon = "assets/icons/star.png";
+  static const String twoStarsIcon = "assets/icons/two_stars.png";
+  static const String threeStarsIcon = "assets/icons/three_stars.png";
 
 
   // images
