@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:twisted_files/core/constants/app_assest.dart';
 import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
+import 'package:twisted_files/core/navigation/app_routes.dart';
 import 'package:twisted_files/features/common/widgets/primary_button.dart';
 
 class CasesListScreen extends StatelessWidget {
@@ -35,7 +36,9 @@ class CasesListScreen extends StatelessWidget {
                       }
                       return PrimaryButton(
                         text: '$index - L/A serial striker',
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, AppRoutes.caseOverViewScreen);
+                        },
                       );
                     },
                   ),

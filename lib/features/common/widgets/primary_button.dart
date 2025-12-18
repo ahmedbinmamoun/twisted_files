@@ -14,7 +14,7 @@ class PrimaryButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         width: double.infinity,
-        height: 85.h,
+        height: 80.h,
         decoration: BoxDecoration(
           color: AppColors.primaryColor,
           borderRadius: BorderRadius.circular(20),
