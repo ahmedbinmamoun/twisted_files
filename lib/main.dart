@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:twisted_files/core/navigation/app_routes.dart';
+import 'package:twisted_files/features/case_overview_screen.dart/case_overView_screen.dart';
 import 'package:twisted_files/features/cases_list_screen/cases_list_screen.dart';
 import 'package:twisted_files/features/home_screen/home_screen.dart';
 import 'package:twisted_files/features/levels_screen/case_levels_screen.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
           AppRoutes.HomeScreen : (context) => HomeScreen(),
           AppRoutes.levelsScreen : (context) => CaseLevelsScreen(),
           AppRoutes.caesesListScreen : (context) => CasesListScreen(),
+          AppRoutes.caseOverViewScreen : (context) => CaseOverviewScreen(),
         },
         );
       },
