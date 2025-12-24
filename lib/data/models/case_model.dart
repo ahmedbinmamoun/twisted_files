@@ -9,6 +9,7 @@ class CaseModel {
   final String difficulty;
   final String title;
   final String summary;
+  final String date;
   final List<EvidenceModel> evidences;
   final List<SuspectModel> suspects;
 
@@ -21,6 +22,7 @@ class CaseModel {
     required this.summary,
     required this.evidences,
     required this.suspects,
+    required this.date
   });
 
   factory CaseModel.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,7 @@ class CaseModel {
       location: json['location'],
       difficulty: json['difficulty'],
       title: json['title'],
+      date: json['date'],
       summary: json['case_file']['summary'],
       evidences: (json['evidences'] as List)
           .map((e) => EvidenceModel.fromJson(e))
@@ -47,6 +50,7 @@ class CaseModel {
       location: location,
       difficulty: difficulty,
       title: title,
+      date: date,
       summary: summary,
       evidences: evidences.map((e) => e.toEntity()).toList(),
       suspects: suspects.map((s) => s.toEntity()).toList(),

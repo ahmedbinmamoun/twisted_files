@@ -36,7 +36,7 @@ class CaseOverviewView extends StatelessWidget {
                     children: [
                       A4Header(
                         caseNumber: caseEntity.caseNumber,
-                        date: '12 Sep',
+                        date: caseEntity.date,
                         location: caseEntity.location,
                         title: caseEntity.title,
                       ),

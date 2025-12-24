@@ -8,6 +8,7 @@ class CaseEntity {
   final String difficulty;
   final String title;
   final String summary;
+  final String date;
 
   final List<EvidenceEntity> evidences;
   final List<SuspectEntity> suspects;
@@ -21,5 +22,6 @@ class CaseEntity {
     required this.summary,
     required this.evidences,
     required this.suspects,
+    required this.date
   });
 }
