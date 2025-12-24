@@ -1,0 +1,27 @@
+{
+  "id": "case_001",
+  "case_number": "TF-001",
+  "location": "Khartoum",
+  "difficulty": "easy",
+
+  "title": "The Last Call",
+
+  "case_file": {
+    "summary": "A man was found dead in his office after a suspicious phone call."
+  },
+
+  "evidences": [
+    {
+      "id": "ev_01",
+      "title": "Medical Report",
+      "content": "Poison was found in the victim's body."
+    }
+  ],
+
+  "suspects": [
+    {
+      "id": "sus_01",
+      "name": "Mona Adel"
+    }
+  ]
+}

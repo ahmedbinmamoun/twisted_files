@@ -1,0 +1,55 @@
+{
+  "id": "case_002",
+  "case_number": "TF-002",
+  "location": "Omdurman",
+  "difficulty": "medium",
+
+  "title": "Shadows in the Office",
+
+  "case_file": {
+    "summary": "Late one evening, a well-known accountant was found dead inside his private office. There were no signs of forced entry, and the office door was locked from the inside. At first glance, the death appeared natural, but several inconsistencies quickly raised suspicion. The victim had received multiple visitors earlier that day, and his recent work involved sensitive financial records tied to powerful individuals. Investigators soon realized that this was not a simple case of sudden death, but a carefully staged crime designed to look accidental."
+  },
+
+  "evidences": [
+    {
+      "id": "ev_01",
+      "title": "Medical Report",
+      "content": "The autopsy revealed traces of a slow-acting toxin in the victim's bloodstream. The toxin would not cause immediate symptoms but could lead to cardiac failure hours after ingestion. No signs of physical struggle were found on the body."
+    },
+    {
+      "id": "ev_02",
+      "title": "Office Door Lock Report",
+      "content": "Forensic analysis showed that the office door was locked from the inside using a key. However, the lock mechanism had been tampered with, suggesting it could be locked externally using a modified tool."
+    },
+    {
+      "id": "ev_03",
+      "title": "Desk Documents",
+      "content": "Several financial documents were found scattered on the victim's desk. One file was missing entirely, believed to contain records of illegal money transfers involving a close associate."
+    },
+    {
+      "id": "ev_04",
+      "title": "Coffee Cup Analysis",
+      "content": "The victim's coffee cup contained residue of the same toxin found in his bloodstream. Fingerprints on the cup belonged to the victim and one unidentified individual."
+    },
+    {
+      "id": "ev_05",
+      "title": "Security Log",
+      "content": "Building security logs showed that power was briefly cut on the victim's floor for five minutes earlier that evening, disabling security cameras during that time."
+    }
+  ],
+
+  "suspects": [
+    {
+      "id": "sus_01",
+      "name": "Mona Adel"
+    },
+    {
+      "id": "sus_02",
+      "name": "Khalid Hassan"
+    },
+    {
+      "id": "sus_03",
+      "name": "Yasir Mahmoud"
+    }
+  ]
+}

@@ -9,27 +9,35 @@ class A4Page extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      // height: 430.h,
-      padding: EdgeInsets.fromLTRB(
-        20.w,
-        28.h,
-        20.w,
-        28.h,
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: 380.w,
+        ),
+        child: Container(
+          padding: EdgeInsets.fromLTRB(
+            20.w,
+            28.h,
+            20.w,
+            28.h,
+          ),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(8.r),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.lightBlack,
+                blurRadius: 12,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: child,
+          ),
+        ),
       ),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(8.r),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.lightBlack,
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          )
-        ],
-      ),
-      child: child,
     );
   }
 }
