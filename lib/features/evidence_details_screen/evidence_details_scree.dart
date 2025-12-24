@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:twisted_files/domain/entities/evidence_entity.dart';
 import 'package:twisted_files/features/common/widgets/a4/a4_page.dart';
 import 'package:twisted_files/features/common/widgets/a4/a4_header.dart';
 import 'package:twisted_files/features/common/widgets/a4/a4_section_title.dart';
@@ -28,7 +27,7 @@ class EvidenceDetailsScreen extends StatelessWidget {
               children: [
                 A4Header(
                   caseNumber: caseEntity.caseNumber,
-                  date: '20 Sep',
+                  date: caseEntity.date,
                   location: caseEntity.location,
                   title: caseEntity.title,
                 ),
