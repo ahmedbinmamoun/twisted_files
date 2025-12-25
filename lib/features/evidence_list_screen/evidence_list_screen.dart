@@ -38,7 +38,7 @@ class EvidenceListScreen extends StatelessWidget {
                   final evidences = state.caseEntity.evidences;
 
                   return ListView.separated(
-                    itemCount: evidences.length + 1,
+                    itemCount: evidences.length + 2,
                     separatorBuilder: (context, index) => SizedBox(height: 10.h),
                     itemBuilder: (context, index) {
                       if (index == 0) {
@@ -54,6 +54,19 @@ class EvidenceListScreen extends StatelessWidget {
                             ),
                           ),
                         );
+                      }
+
+                      if (index == evidences.length +1) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            top: 20.h, bottom: 20.h
+                            ),
+                            child: PrimaryButton(
+                              text: 'START INVESTIGATION',
+                             onPressed: (){
+                              Navigator.pushNamed(context, AppRoutes.investigationQuestionsScreen, arguments: state.caseEntity);
+                             }),
+                            );
                       }
                   
                       final evidence = evidences[index - 1];

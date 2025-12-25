@@ -1,4 +1,5 @@
 import 'package:twisted_files/data/models/evidence_model.dart';
+import 'package:twisted_files/data/models/qustion_model.dart';
 import 'package:twisted_files/data/models/suspect_model.dart';
 import 'package:twisted_files/domain/entities/case_entity.dart';
 
@@ -12,6 +13,7 @@ class CaseModel {
   final String date;
   final List<EvidenceModel> evidences;
   final List<SuspectModel> suspects;
+  final List<QuestionModel> questions;
 
   CaseModel({
     required this.id,
@@ -22,6 +24,7 @@ class CaseModel {
     required this.summary,
     required this.evidences,
     required this.suspects,
+    required this.questions,
     required this.date
   });
 
@@ -40,6 +43,9 @@ class CaseModel {
       suspects: (json['suspects'] as List)
           .map((s) => SuspectModel.fromJson(s))
           .toList(),
+      questions: (json['questions'] as List)
+          .map((s) => QuestionModel.fromJson(s))
+          .toList(),
     );
   }
 
@@ -54,6 +60,7 @@ class CaseModel {
       summary: summary,
       evidences: evidences.map((e) => e.toEntity()).toList(),
       suspects: suspects.map((s) => s.toEntity()).toList(),
+      questions: questions.map((s) => s.toEntity()).toList(),
     );
   }
 }

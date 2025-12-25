@@ -14,7 +14,7 @@ class CaseOverviewScreen extends StatelessWidget {
       create: (_) {
         final localDataSource = LocalCaseDataSourceImpl();
         final repository = CaseRepositoryImpl(localDataSource);
-        return InvestigationCubit(repository)..loadCase('case-002');
+        return InvestigationCubit(repository)..loadCase('case-004');
       },
       child:  CaseOverviewView(),
     );

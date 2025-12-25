@@ -1,3 +1,5 @@
+import 'package:twisted_files/domain/entities/question_entity.dart';
+
 import 'evidence_entity.dart';
 import 'suspect_entity.dart';
 
@@ -12,6 +14,7 @@ class CaseEntity {
 
   final List<EvidenceEntity> evidences;
   final List<SuspectEntity> suspects;
+  final List<QuestionEntity> questions;
 
   CaseEntity({
     required this.id,
@@ -22,6 +25,7 @@ class CaseEntity {
     required this.summary,
     required this.evidences,
     required this.suspects,
+    required this.questions,
     required this.date
   });
 }
