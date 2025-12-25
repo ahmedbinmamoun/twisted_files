@@ -51,5 +51,28 @@
       "id": "sus_03",
       "name": "Yasir Mahmoud"
     }
-  ]
+  ],
+
+  "questions": [
+  {
+    "id": "q1",
+    "question": "What was the cause of death?",
+    "options": [
+      "Heart attack",
+      "Poisoning",
+      "Gunshot"
+    ],
+    "correct_answer": "Poisoning"
+  },
+  {
+    "id": "q2",
+    "question": "Where was the victim found?",
+    "options": [
+      "At home",
+      "In his office",
+      "In the street"
+    ],
+    "correct_answer": "In his office"
+  }
+]
 }
