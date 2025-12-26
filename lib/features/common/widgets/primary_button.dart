@@ -13,6 +13,7 @@ class PrimaryButton extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.w),
         width: double.infinity,
         height: 80.h,
         decoration: BoxDecoration(
@@ -21,7 +22,7 @@ class PrimaryButton extends StatelessWidget {
           
         ),
         child: Center(
-             child: Text(text,style: AppStyles.mediumButtonText,),
+             child: Text(text,style: AppStyles.mediumButtonText,textAlign: TextAlign.center,),
          
         ),
       ),

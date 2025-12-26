@@ -52,7 +52,7 @@ class CaseOverviewView extends StatelessWidget {
                       SizedBox(height: 32.h),
 
                       PrimaryButton(
-                        text: 'Start Investigation',
+                        text: 'SHOW EVIDENCES',
                         onPressed: () {
                           Navigator.push(
                             context,

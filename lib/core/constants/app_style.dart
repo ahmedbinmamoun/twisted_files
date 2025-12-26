@@ -14,7 +14,8 @@ class AppStyles {
     fontWeight: FontWeight.bold,
     color: AppColors.scenderyColor,
   );
-  static TextStyle logo = GoogleFonts.changa(
+  static TextStyle logo = TextStyle(
+    fontFamily: 'Tajawal',
     fontSize: 40.sp,
     fontWeight: FontWeight.bold,
     color: AppColors.blackColor,
