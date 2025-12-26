@@ -12,4 +12,10 @@ class CaseRepositoryImpl implements CaseRepository {
     final model = await localDataSource.loadCase(caseId);
     return model.toEntity();
   }
+
+  @override
+  Future<List<CaseEntity>> getAllCases() async {
+    final models = await localDataSource.loadAllCases();
+    return models.map((model) => model.toEntity()).toList();
+  }
 }
