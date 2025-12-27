@@ -5,19 +5,27 @@ import 'package:twisted_files/core/constants/app_assest.dart';
 import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
 import 'package:twisted_files/core/navigation/app_routes.dart';
-import 'package:twisted_files/features/cases_list_screen/cases_list_state.dart';
-import 'package:twisted_files/features/common/widgets/primary_button.dart';
 import 'package:twisted_files/domain/repositories/case_repository.dart';
+import 'package:twisted_files/features/cases_list_screen/cubit/cases_level_cubit.dart';
+import 'package:twisted_files/features/cases_list_screen/cubit/cases_list_state.dart' hide CasesListCubit;
+import 'package:twisted_files/features/common/widgets/primary_button.dart';
 
 class CasesListScreen extends StatelessWidget {
   final CaseRepository repository;
 
-  const CasesListScreen({super.key, required this.repository});
+  const CasesListScreen({
+    super.key,
+    required this.repository,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final difficulty =
+        ModalRoute.of(context)!.settings.arguments as String;
+
     return BlocProvider(
-      create: (_) => CasesListCubit(repository)..loadCases(),
+      create: (_) =>
+          CasesListCubit(repository)..loadCasesByDifficulty(difficulty),
       child: Stack(
         children: [
           Image.asset(AppAssests.backgroundImage, fit: BoxFit.fill),
@@ -36,13 +44,19 @@ class CasesListScreen extends StatelessWidget {
 
                     return ListView.separated(
                       itemCount: cases.length + 1,
-                      separatorBuilder: (context, index) => SizedBox(height: 10.h),
+                      separatorBuilder: (context, _) => SizedBox(height: 10.h),
                       itemBuilder: (context, index) {
                         if (index == 0) {
                           return Padding(
-                            padding: EdgeInsets.only(bottom: 30.h, top: 80.h),
+                            padding: EdgeInsets.only(
+                              top: 80.h,
+                              bottom: 30.h,
+                            ),
                             child: Center(
-                              child: Text('Available Cases', style: AppStyles.logo),
+                              child: Text(
+                                '${difficulty.toUpperCase()} CASES',
+                                style: AppStyles.logo,
+                              ),
                             ),
                           );
                         }
@@ -50,7 +64,7 @@ class CasesListScreen extends StatelessWidget {
                         final caseItem = cases[index - 1];
 
                         return PrimaryButton(
-                          text: '${caseItem.title}',
+                          text: caseItem.title,
                           onPressed: () {
                             Navigator.pushNamed(
                               context,
