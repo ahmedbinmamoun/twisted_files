@@ -13,31 +13,54 @@ class CaseLevelsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image.asset(AppAssests.backgroundImage,fit: BoxFit.fill,),
+        Image.asset(AppAssests.backgroundImage, fit: BoxFit.fill),
         Scaffold(
           backgroundColor: AppColors.transparentColor,
           body: Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 15.w),
+            padding: EdgeInsets.symmetric(horizontal: 15.w),
             child: Column(
               children: [
-                SizedBox(height: 120.h,),
-                Text('CASE LEVEL',style: AppStyles.logo,),
-                SizedBox(height: 120.h,),
+                SizedBox(height: 120.h),
+                Text('CASE LEVEL', style: AppStyles.logo),
+                SizedBox(height: 120.h),
                 PrimaryCard(
                   icon: AppAssests.oneStarIcon,
-                   text: 'EASY CASES',
-                   onPressed: (){
-                    Navigator.pushNamed(context, AppRoutes.caesesListScreen);
-                   },
-                   ),
-                SizedBox(height: 20.h,),
-                PrimaryCard(icon: AppAssests.twoStarsIcon, text: 'MEDIUM CASES'),
-                SizedBox(height: 20.h,),
-                PrimaryCard(icon: AppAssests.threeStarsIcon, text: 'HARD CASES'),
+                  text: 'EASY CASES',
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      AppRoutes.caesesListScreen,
+                      arguments: 'easy',
+                    );
+                  },
+                ),
+                SizedBox(height: 20.h),
+                PrimaryCard(
+                  icon: AppAssests.twoStarsIcon,
+                  text: 'MEDIUM CASES',
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      AppRoutes.caesesListScreen,
+                      arguments: 'medium',
+                    );
+                  },
+                ),
+                SizedBox(height: 20.h),
+                PrimaryCard(
+                  icon: AppAssests.threeStarsIcon,
+                  text: 'HARD CASES',
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      AppRoutes.caesesListScreen,
+                      arguments: 'hard',
+                    );
+                  },
+                ),
               ],
             ),
           ),
-          
         ),
       ],
     );
