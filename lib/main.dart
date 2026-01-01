@@ -21,18 +21,14 @@ import 'package:twisted_files/features/questions_screen/investigation_questions_
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // تهيئة SharedPreferences
   final sharedPreferences = await SharedPreferences.getInstance();
 
-  // إعداد الـ data sources
   final localCaseDataSource = LocalCaseDataSourceImpl();
   final localScoreDataSource = LocalScoreDataSourceImpl(sharedPreferences);
 
-  // إعداد الـ repositories
   final CaseRepository caseRepository = CaseRepositoryImpl(localCaseDataSource);
   final ScoreRepository scoreRepository = ScoreRepositoryImpl(localScoreDataSource);
 
-  // إعداد الـ use case
   final updateScoreUseCase = UpdateScoreUseCase(scoreRepository);
 
   runApp(MyApp(

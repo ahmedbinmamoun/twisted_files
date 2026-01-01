@@ -23,7 +23,7 @@ class InvestigationQuestionsScreen extends StatelessWidget {
     super.key,
     required this.caseEntity,
     required this.updateScoreUseCase,
-    required this.scoreRepository
+    required this.scoreRepository,
   });
 
   @override
@@ -34,7 +34,9 @@ class InvestigationQuestionsScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => QuestionsCubit()),
-        BlocProvider(create: (_) => ScoreCubit(updateScoreUseCase, scoreRepository)),
+        BlocProvider(
+          create: (_) => ScoreCubit(updateScoreUseCase, scoreRepository),
+        ),
       ],
       child: Stack(
         children: [
@@ -52,14 +54,15 @@ class InvestigationQuestionsScreen extends StatelessWidget {
                 child: BlocBuilder<QuestionsCubit, int>(
                   builder: (context, index) {
                     final scoreCubit = context.read<ScoreCubit>();
-                    final currentScore = scoreCubit.state.score;
 
                     if (index >= questions.length) {
                       return ChooseSuspectView(
                         suspects: suspects,
                         onSelect: (suspect) async {
                           await scoreCubit.solveSuspect(caseEntity);
-                          print('suspect points added, total: ${scoreCubit.state.score.totalScore}');
+                          print(
+                            'suspect points added, total: ${scoreCubit.state.score.totalScore}',
+                          );
 
                           Navigator.pushNamedAndRemoveUntil(
                             context,
@@ -80,8 +83,7 @@ class InvestigationQuestionsScreen extends StatelessWidget {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        
-                        SizedBox(height: 10.h,),
+                        SizedBox(height: 10.h),
                         Row(
                           children: [
                             Text(
@@ -93,10 +95,7 @@ class InvestigationQuestionsScreen extends StatelessWidget {
                           ],
                         ),
                         SizedBox(height: 140.h),
-                        Text(
-                          question.question,
-                          style: AppStyles.largeTitle,
-                        ),
+                        Text(question.question, style: AppStyles.largeTitle),
                         SizedBox(height: 50.h),
                         ...question.options.map(
                           (option) => Padding(
@@ -104,17 +103,33 @@ class InvestigationQuestionsScreen extends StatelessWidget {
                             child: PrimaryButton(
                               text: option,
                               onPressed: () async {
-                                final isCorrect = option == question.correctAnswer;
+                                final isCorrect =
+                                    option == question.correctAnswer;
                                 if (isCorrect) {
-                                print('correct answer, total score: ${scoreCubit.state.score.totalScore}');
-                                  await scoreCubit.solveQuestion(caseEntity);
+                                  print(
+                                    'correct answer, total score: ${scoreCubit.state.score.totalScore}',
+                                  );
+                                  await scoreCubit.answerQuestion(
+                                    caseEntity,
+                                    true,
+                                  );
                                   context.read<QuestionsCubit>().next();
-                                  print('correct answer, total score: ${scoreCubit.state.score.totalScore}');
+                                  print(
+                                    'after correct, total score: ${scoreCubit.state.score.totalScore}',
+                                  );
                                 } else {
-                                  print('wrong answer, total score: ${scoreCubit.state.score.totalScore}');
+                                  print(
+                                    'wrong answer, total score: ${scoreCubit.state.score.totalScore}',
+                                  );
+                                  await scoreCubit.answerQuestion(
+                                    caseEntity,
+                                    false,
+                                  );
                                   context.read<QuestionsCubit>().next();
+                                  print(
+                                    'after wrong, total score: ${scoreCubit.state.score.totalScore}',
+                                  );
                                 }
-                                
                               },
                             ),
                           ),
