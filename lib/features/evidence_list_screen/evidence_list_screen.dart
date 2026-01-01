@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:twisted_files/core/constants/app_assest.dart';
 import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
@@ -15,7 +14,6 @@ class EvidenceListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Stack(
       children: [
         Image.asset(
@@ -43,10 +41,7 @@ class EvidenceListScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       if (index == 0) {
                         return Padding(
-                          padding: EdgeInsets.only(
-                            bottom: 30.h,
-                            top: 80.h,
-                          ),
+                          padding: EdgeInsets.only(bottom: 30.h, top: 80.h),
                           child: Center(
                             child: Text(
                               'EVIDENCE',
@@ -56,22 +51,24 @@ class EvidenceListScreen extends StatelessWidget {
                         );
                       }
 
-                      if (index == evidences.length +1) {
+                      if (index == evidences.length + 1) {
                         return Padding(
-                          padding: EdgeInsets.only(
-                            top: 20.h, bottom: 20.h
-                            ),
-                            child: PrimaryButton(
-                              text: 'START INVESTIGATION',
-                             onPressed: (){
-                              Navigator.pushNamed(context, AppRoutes.investigationQuestionsScreen, arguments: state.caseEntity);
-                             }),
-                            );
+                          padding: EdgeInsets.only(top: 20.h, bottom: 20.h),
+                          child: PrimaryButton(
+                            text: 'START INVESTIGATION',
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                AppRoutes.investigationQuestionsScreen,
+                                arguments: state.caseEntity,
+                              );
+                            },
+                          ),
+                        );
                       }
-                  
+
                       final evidence = evidences[index - 1];
-                      
-                  
+
                       return PrimaryButton(
                         text: evidence.title,
                         onPressed: () {
@@ -79,9 +76,9 @@ class EvidenceListScreen extends StatelessWidget {
                             context,
                             AppRoutes.evidenceDetailsScreen,
                             arguments: {
-                              'case' : state.caseEntity,
-                              'evidence' : evidence,
-                            }
+                              'case': state.caseEntity,
+                              'evidence': evidence,
+                            },
                           );
                         },
                       );
