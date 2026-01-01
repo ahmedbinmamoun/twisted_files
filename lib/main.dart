@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twisted_files/core/navigation/app_routes.dart';
 import 'package:twisted_files/data/data_source/local_case_data_source_impl.dart';
+import 'package:twisted_files/data/data_source/local_score_data_source_impl.dart';
 import 'package:twisted_files/data/repositories/case_repository_impl.dart';
+import 'package:twisted_files/data/repositories/score_repository_impl.dart';
+import 'package:twisted_files/domain/entities/case_entity.dart';
 import 'package:twisted_files/domain/repositories/case_repository.dart';
+import 'package:twisted_files/domain/repositories/score_repository.dart';
+import 'package:twisted_files/domain/use_cases/update_score_use_case.dart';
 import 'package:twisted_files/features/case_overview_screen.dart/case_overView_screen.dart';
 import 'package:twisted_files/features/cases_list_screen/cases_list_screen.dart';
 import 'package:twisted_files/features/evidence_details_screen/evidence_details_scree.dart';
@@ -12,15 +18,41 @@ import 'package:twisted_files/features/home_screen/home_screen.dart';
 import 'package:twisted_files/features/levels_screen/case_levels_screen.dart';
 import 'package:twisted_files/features/questions_screen/investigation_questions_screen.dart';
 
-void main() {
-  final localDataSource = LocalCaseDataSourceImpl();
-  final CaseRepository repository = CaseRepositoryImpl(localDataSource);
-  runApp( MyApp(repository: repository));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // تهيئة SharedPreferences
+  final sharedPreferences = await SharedPreferences.getInstance();
+
+  // إعداد الـ data sources
+  final localCaseDataSource = LocalCaseDataSourceImpl();
+  final localScoreDataSource = LocalScoreDataSourceImpl(sharedPreferences);
+
+  // إعداد الـ repositories
+  final CaseRepository caseRepository = CaseRepositoryImpl(localCaseDataSource);
+  final ScoreRepository scoreRepository = ScoreRepositoryImpl(localScoreDataSource);
+
+  // إعداد الـ use case
+  final updateScoreUseCase = UpdateScoreUseCase(scoreRepository);
+
+  runApp(MyApp(
+    caseRepository: caseRepository,
+    updateScoreUseCase: updateScoreUseCase,
+    scoreRepository: scoreRepository,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  final CaseRepository repository;
-  const MyApp({super.key, required this.repository});
+  final CaseRepository caseRepository;
+  final UpdateScoreUseCase updateScoreUseCase;
+  final ScoreRepository scoreRepository;
+
+  const MyApp({
+    super.key,
+    required this.caseRepository,
+    required this.updateScoreUseCase,
+    required this.scoreRepository
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +67,22 @@ class MyApp extends StatelessWidget {
           routes: {
             AppRoutes.homeScreen: (_) => HomeScreen(),
             AppRoutes.levelsScreen: (_) => CaseLevelsScreen(),
-            AppRoutes.caesesListScreen: (_) => CasesListScreen(repository: repository,),
-            AppRoutes.caseOverViewScreen: (context){ 
+            AppRoutes.caesesListScreen: (_) => CasesListScreen(repository: caseRepository),
+            AppRoutes.caseOverViewScreen: (context) {
               final caseId = ModalRoute.of(context)!.settings.arguments as String;
-              return CaseOverviewScreen(caseId: caseId, repository: repository);
-            } ,
+              return CaseOverviewScreen(caseId: caseId, repository: caseRepository);
+            },
             AppRoutes.evidenceListScreen: (_) => const EvidenceListScreen(),
             AppRoutes.evidenceDetailsScreen: (_) => const EvidenceDetailsScreen(),
-            AppRoutes.investigationQuestionsScreen: (_) => const InvestigationQuestionsScreen(),
+            AppRoutes.investigationQuestionsScreen: (context) {
+              final caseEntity = ModalRoute.of(context)!.settings.arguments as CaseEntity;
+              // final caseEntity = args['case'];
+              return InvestigationQuestionsScreen(
+                caseEntity: caseEntity,
+                updateScoreUseCase: updateScoreUseCase,
+                scoreRepository: scoreRepository,
+              );
+            },
           },
         );
       },

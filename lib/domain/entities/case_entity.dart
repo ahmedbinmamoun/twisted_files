@@ -28,4 +28,18 @@ class CaseEntity {
     required this.questions,
     required this.date
   });
+
+  factory CaseEntity.empty(){
+    return CaseEntity(
+      id: '',
+     caseNumber: '',
+      location: '',
+       difficulty: 'easy',
+        title: '',
+         summary: '',
+          evidences: [],
+           suspects: [],
+           questions: [],
+           date: '');
+  }
 }
