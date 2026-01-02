@@ -18,6 +18,7 @@ class AppAssests {
   // images
   static const String splashImage = "assets/images/splash.png";
   static const String backgroundImage = "assets/images/background.png";
+  static const String notesBackgroundImage = "assets/images/note_background.png";
 
 
   // stikers

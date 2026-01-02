@@ -9,6 +9,7 @@ import 'package:twisted_files/domain/entities/case_entity.dart';
 import 'package:twisted_files/domain/repositories/score_repository.dart';
 import 'package:twisted_files/domain/use_cases/update_score_use_case.dart';
 import 'package:twisted_files/features/common/widgets/primary_button.dart';
+import 'package:twisted_files/features/notes/notes_fab.dart';
 import 'package:twisted_files/features/questions_screen/choose_suspect_view.dart';
 import 'package:twisted_files/features/questions_screen/questions_cubit.dart';
 import 'package:twisted_files/features/score/score_cubit/score_cubit.dart';
@@ -48,6 +49,7 @@ class InvestigationQuestionsScreen extends StatelessWidget {
           ),
           Scaffold(
             backgroundColor: AppColors.transparentColor,
+            floatingActionButton: NotesFab(caseId: caseEntity.id),
             body: SafeArea(
               child: Padding(
                 padding: EdgeInsets.all(16.w),
