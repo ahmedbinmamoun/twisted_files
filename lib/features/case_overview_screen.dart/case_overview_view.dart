@@ -10,26 +10,32 @@ import 'package:twisted_files/features/common/widgets/primary_button.dart';
 import 'package:twisted_files/features/evidence_list_screen/evidence_list_screen.dart';
 import 'package:twisted_files/features/investigation/cubit/investigation_cubit.dart';
 import 'package:twisted_files/features/investigation/cubit/investigation_state.dart';
+import 'package:twisted_files/features/notes/notes_fab.dart';
+
 
 class CaseOverviewView extends StatelessWidget {
-  const CaseOverviewView();
+  const CaseOverviewView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(16.w),
-          child: BlocBuilder<InvestigationCubit, InvestigationState>(
-            builder: (context, state) {
-              if (state is InvestigationLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
+    return BlocBuilder<InvestigationCubit, InvestigationState>(
+      builder: (context, state) {
+        if (state is InvestigationLoading) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
 
-              if (state is InvestigationLoaded) {
-                final caseEntity = state.caseEntity;
+        if (state is InvestigationLoaded) {
+          final caseEntity = state.caseEntity;
 
-                return A4Page(
+          return Scaffold(
+            floatingActionButton: NotesFab(caseId: caseEntity.id),
+
+            body: SafeArea(
+              child: Padding(
+                padding: EdgeInsets.all(16.w),
+                child: A4Page(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -41,7 +47,6 @@ class CaseOverviewView extends StatelessWidget {
                       ),
 
                       const A4Divider(),
-
                       const A4SectionTitle('Case Summary'),
 
                       Text(
@@ -56,24 +61,31 @@ class CaseOverviewView extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => BlocProvider.value(value: context.read<InvestigationCubit>(),child: EvidenceListScreen(),))
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider.value(
+                                value: context.read<InvestigationCubit>(),
+                                child: const EvidenceListScreen(),
+                              ),
+                            ),
                           );
                         },
                       ),
                     ],
                   ),
-                );
-              }
+                ),
+              ),
+            ),
+          );
+        }
 
-              if (state is InvestigationError) {
-                return Center(child: Text(state.message));
-              }
+        if (state is InvestigationError) {
+          return Scaffold(
+            body: Center(child: Text(state.message)),
+          );
+        }
 
-              return const SizedBox.shrink();
-            },
-          ),
-        ),
-      ),
+        return const SizedBox.shrink();
+      },
     );
   }
 }
