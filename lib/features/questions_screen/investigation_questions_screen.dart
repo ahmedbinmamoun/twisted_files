@@ -36,7 +36,8 @@ class InvestigationQuestionsScreen extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => QuestionsCubit()),
         BlocProvider(
-          create: (_) => ScoreCubit(updateScoreUseCase, scoreRepository),
+          // create: (_) => ScoreCubit(updateScoreUseCase, scoreRepository),
+          create: (_) => ScoreCubit(updateScoreUseCase, scoreRepository, activeCaseId: caseEntity.id),
         ),
       ],
       child: Stack(
@@ -62,6 +63,7 @@ class InvestigationQuestionsScreen extends StatelessWidget {
                         suspects: suspects,
                         onSelect: (suspect) async {
                           await scoreCubit.solveSuspect(caseEntity);
+                          await scoreCubit.finalizeCase(caseEntity);
                           print(
                             'suspect points added, total: ${scoreCubit.state.score.totalScore}',
                           );
