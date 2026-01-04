@@ -34,6 +34,8 @@ class UpdateScoreUseCase {
     required bool wrongQuestion, 
     required CaseEntity caseEntity,
   }) async {
+    print('DEBUG: UpdateScoreUseCase.call current=${currentScore.totalScore} '
+          'solvedQ=$solvedQuestion solvedS=$solvedSuspect difficulty=${caseEntity.difficulty}');
     final difficulty = _parseDifficulty(caseEntity.difficulty);
     int multiplier = difficultyMultiplier(difficulty);
 
@@ -42,24 +44,22 @@ class UpdateScoreUseCase {
     int totalScore = currentScore.totalScore;
 
     if (solvedQuestion) {
-      final add = 10 * multiplier;
-      questionPoints += add;
-      totalScore += add;
+      questionPoints += 10 * multiplier;
+      totalScore += 10 * multiplier;
     }
 
     if (wrongQuestion) {
-      final penalty = 5 * multiplier;
-      questionPoints -= penalty;
-      totalScore -= penalty;
+      final penalty = 20 * multiplier;
+      questionPoints -=  penalty;
+      totalScore -=  penalty;
 
-      if (questionPoints < 0) questionPoints = 0;
-      if (totalScore < 0) totalScore = 0;
+      // if (questionPoints < 0) questionPoints = 0;
+      // if (totalScore < 0) totalScore = 0;
     }
 
     if (solvedSuspect) {
-      final add = 50 * multiplier;
-      suspectPoints += add;
-      totalScore += add;
+      suspectPoints += 50 * multiplier;
+      totalScore += 50 * multiplier;
     }
 
     final updatedScore = ScoreEntity(

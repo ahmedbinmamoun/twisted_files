@@ -33,7 +33,7 @@ class ScoreCubit extends Cubit<ScoreState> {
       currentScore: state.score,
       solvedQuestion: isCorrect,
       solvedSuspect: false,
-      caseEntity: caseEntity, wrongQuestion: isCorrect,
+      caseEntity: caseEntity, wrongQuestion: !isCorrect,
     );
     emit(ScoreState(updated));
   }
