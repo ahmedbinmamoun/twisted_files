@@ -6,16 +6,29 @@ import 'package:twisted_files/features/common/widgets/a4/a4_section_title.dart';
 import 'package:twisted_files/features/common/widgets/a4/a4_divider.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
 import 'package:twisted_files/features/notes/notes_fab.dart';
+import 'package:twisted_files/domain/entities/case_entity.dart';
 
 class EvidenceDetailsScreen extends StatelessWidget {
   const EvidenceDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final caseEntity = args['case'];
-    final evidence = args['evidence'];
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final CaseEntity caseEntity = args['case'];
+    final bool isSuspect = args['isSuspect'] == true;
+
+    final String title;
+    final String content;
+
+    if (isSuspect) {
+      final suspect = args['suspect'];
+      title = suspect?.name ?? '';
+      content = suspect?.description ?? '';
+    } else {
+      final evidence = args['evidence'];
+      title = evidence?.title ?? '';
+      content = evidence?.content ?? '';
+    }
 
     return Scaffold(
       floatingActionButton: NotesFab(caseId: caseEntity.id),
@@ -35,9 +48,9 @@ class EvidenceDetailsScreen extends StatelessWidget {
 
                 const A4Divider(),
 
-                A4SectionTitle(evidence.title),
+                A4SectionTitle(title),
 
-                Text(evidence.content, style: AppStyles.mediumBody),
+                Text(content, style: AppStyles.mediumBody),
               ],
             ),
           ),

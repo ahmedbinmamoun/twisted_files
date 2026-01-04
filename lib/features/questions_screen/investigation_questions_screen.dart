@@ -36,7 +36,6 @@ class InvestigationQuestionsScreen extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => QuestionsCubit()),
         BlocProvider(
-          // create: (_) => ScoreCubit(updateScoreUseCase, scoreRepository),
           create: (_) => ScoreCubit(updateScoreUseCase, scoreRepository, activeCaseId: caseEntity.id),
         ),
       ],
@@ -64,9 +63,6 @@ class InvestigationQuestionsScreen extends StatelessWidget {
                         onSelect: (suspect) async {
                           await scoreCubit.solveSuspect(caseEntity);
                           await scoreCubit.finalizeCase(caseEntity);
-                          print(
-                            'suspect points added, total: ${scoreCubit.state.score.totalScore}',
-                          );
 
                           Navigator.pushNamedAndRemoveUntil(
                             context,
@@ -110,29 +106,17 @@ class InvestigationQuestionsScreen extends StatelessWidget {
                                 final isCorrect =
                                     option == question.correctAnswer;
                                 if (isCorrect) {
-                                  print(
-                                    'correct answer, total score: ${scoreCubit.state.score.totalScore}',
-                                  );
                                   await scoreCubit.answerQuestion(
                                     caseEntity,
                                     true,
                                   );
                                   context.read<QuestionsCubit>().next();
-                                  print(
-                                    'after correct, total score: ${scoreCubit.state.score.totalScore}',
-                                  );
                                 } else {
-                                  print(
-                                    'wrong answer, total score: ${scoreCubit.state.score.totalScore}',
-                                  );
                                   await scoreCubit.answerQuestion(
                                     caseEntity,
                                     false,
                                   );
                                   context.read<QuestionsCubit>().next();
-                                  print(
-                                    'after wrong, total score: ${scoreCubit.state.score.totalScore}',
-                                  );
                                 }
                               },
                             ),

@@ -4,9 +4,11 @@ import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
 
 class PrimaryButton extends StatelessWidget {
-   PrimaryButton({super.key, required this.text, required this.onPressed});
+   PrimaryButton({super.key, required this.text, required this.onPressed, this.backgroundColor, this.borderColor});
    String text;
    VoidCallback? onPressed;
+   Color? backgroundColor;
+   Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +19,18 @@ class PrimaryButton extends StatelessWidget {
         width: double.infinity,
         height: 80.h,
         decoration: BoxDecoration(
-          color: AppColors.primaryColor,
+          color: backgroundColor ?? AppColors.primaryColor,
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: borderColor ?? AppColors.primaryColor,
+            width: 3.w
+          )
           
         ),
         child: Center(
-             child: Text(text,style: AppStyles.mediumButtonText,textAlign: TextAlign.center,),
+             child: Text(text,style: AppStyles.mediumButtonText.copyWith(
+              color: borderColor ?? AppColors.scenderyColor
+             ),textAlign: TextAlign.center,),
          
         ),
       ),
