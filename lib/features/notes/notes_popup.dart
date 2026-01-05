@@ -62,6 +62,7 @@ class _NotesPopupState extends State<NotesPopup> {
               child: TextField(
                 controller: controller,
                 maxLines: null,
+                cursorColor: AppColors.scenderyColor,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                 ),
