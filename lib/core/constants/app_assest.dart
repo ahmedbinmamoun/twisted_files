@@ -23,5 +23,8 @@ class AppAssests {
 
   // stikers
   static const String caseClosedStiker = "assets/images/case_closed.png";
+
+  // lottie
+  static const String detectiveWalkLottie = "assets/lottie/detective_walk.json";
   
 }

@@ -80,58 +80,53 @@ class InvestigationQuestionsScreen extends StatelessWidget {
 
                     final question = questions[index];
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 10.h),
-                        Row(
-                          children: [
-                            Text(
-                              'Question ${index + 1}/${questions.length}',
-                              style: AppStyles.mediumBody,
-                            ),
-                            Spacer(),
-                            ScoreWidget(),
-                          ],
-                        ),
-                        SizedBox(height: 140.h),
-                        Text(question.question, style: AppStyles.largeTitle),
-                        SizedBox(height: 50.h),
-                        ...question.options.map(
-                          (option) => Padding(
-                            padding: EdgeInsets.only(bottom: 12.h),
-                            child: PrimaryButton(
-                              text: option,
-                              onPressed: () async {
-                                final isCorrect =
-                                    option == question.correctAnswer;
-                                if (isCorrect) {
-                                  await scoreCubit.answerQuestion(
-                                    caseEntity,
-                                    true,
-                                  );
-                                  context.read<QuestionsCubit>().next();
-                                } else {
-                                  await scoreCubit.answerQuestion(
-                                    caseEntity,
-                                    false,
-                                  );
-                                  context.read<QuestionsCubit>().next();
-                                }
-                              },
+                    return SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 10.h),
+                          Row(
+                            children: [
+                              Text(
+                                'Question ${index + 1}/${questions.length}',
+                                style: AppStyles.mediumBody,
+                              ),
+                              Spacer(),
+                              ScoreWidget(),
+                            ],
+                          ),
+                          SizedBox(height: 80.h),
+                          Text(question.question, style: AppStyles.largeTitle),
+                          SizedBox(height: 50.h),
+                          ...question.options.map(
+                            (option) => Padding(
+                              padding: EdgeInsets.only(bottom: 12.h),
+                              child: PrimaryButton(
+                                text: option,
+                                onPressed: () async {
+                                  final isCorrect =
+                                      option == question.correctAnswer;
+                                  if (isCorrect) {
+                                    await scoreCubit.answerQuestion(
+                                      caseEntity,
+                                      true,
+                                    );
+                                    context.read<QuestionsCubit>().next();
+                                  } else {
+                                    await scoreCubit.answerQuestion(
+                                      caseEntity,
+                                      false,
+                                    );
+                                    context.read<QuestionsCubit>().next();
+                                  }
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 30.h),
-                        BlocBuilder<ScoreCubit, ScoreState>(
-                          builder: (context, scoreState) {
-                            return Text(
-                              'Score: ${scoreState.score.totalScore}',
-                              style: AppStyles.mediumBody,
-                            );
-                          },
-                        ),
-                      ],
+                          SizedBox(height: 30.h),
+                          
+                        ],
+                      ),
                     );
                   },
                 ),

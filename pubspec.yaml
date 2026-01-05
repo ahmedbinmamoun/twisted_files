@@ -39,6 +39,7 @@ dependencies:
   flutter_native_splash: ^2.4.7
   flutter_bloc: ^9.1.1
   shared_preferences: ^2.5.3
+  lottie: ^3.3.1
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +51,14 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo/logo.png"
+  adaptive_icon_background: "#292626"
+  adaptive_icon_foreground: "assets/logo/logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -68,6 +77,8 @@ flutter:
     - assets/icons/
     - assets/data/cases/
     - assets/data/cases/easy/
+    - assets/lottie/
+    - assets/logo/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

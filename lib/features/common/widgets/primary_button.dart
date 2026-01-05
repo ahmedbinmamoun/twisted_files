@@ -15,9 +15,9 @@ class PrimaryButton extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.w),
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
         width: double.infinity,
-        height: 80.h,
+        // height: 80.h,
         decoration: BoxDecoration(
           color: backgroundColor ?? AppColors.primaryColor,
           borderRadius: BorderRadius.circular(20),
@@ -28,7 +28,10 @@ class PrimaryButton extends StatelessWidget {
           
         ),
         child: Center(
-             child: Text(text,style: AppStyles.mediumButtonText.copyWith(
+             child: Text(text,
+             maxLines: null,
+             softWrap: true,
+             style: AppStyles.mediumButtonText.copyWith(
               color: borderColor ?? AppColors.scenderyColor
              ),textAlign: TextAlign.center,),
          
