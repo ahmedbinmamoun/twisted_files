@@ -31,9 +31,13 @@ class HomeScreen extends StatelessWidget {
                    },
                    ),
                 SizedBox(height: 20.h,),
-                PrimaryCard(icon: AppAssests.infoIcon, text: 'ABOUT'),
+                PrimaryCard(icon: AppAssests.infoIcon, text: 'ABOUT',onPressed: (){
+                  Navigator.pushNamed(context, AppRoutes.aboutScreen);
+                },),
                 SizedBox(height: 20.h,),
-                PrimaryCard(icon: AppAssests.oldDetectiveIcon, text: 'PROFILE'),
+                PrimaryCard(icon: AppAssests.oldDetectiveIcon, text: 'PROFILE',onPressed: (){
+                  Navigator.pushNamed(context, AppRoutes.profileScreen);
+                },),
               ],
             ),
           ),

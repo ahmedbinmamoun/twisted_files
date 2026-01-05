@@ -6,4 +6,6 @@ class AppRoutes {
   static const String evidenceListScreen = 'evidenceListScreen';
   static const String evidenceDetailsScreen = 'evidenceDetailsScreen';
   static const String investigationQuestionsScreen = 'investigationQuestionsScreen';
+  static const String aboutScreen = 'aboutScreen';
+  static const String profileScreen = 'profileScreen';
 }
