@@ -26,5 +26,10 @@ class AppAssests {
 
   // lottie
   static const String detectiveWalkLottie = "assets/lottie/detective_walk.json";
-  
+
+
+  // sounds
+  static const String correctSound = "assets/sounds/correct.mp3";
+  static const String wrongSound = "assets/sounds/wrong.mp3";
+
 }
