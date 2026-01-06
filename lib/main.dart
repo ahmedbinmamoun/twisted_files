@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/navigation/app_routes.dart';
 import 'package:twisted_files/data/data_source/local_case_data_source_impl.dart';
 import 'package:twisted_files/data/data_source/local_score_data_source_impl.dart';
@@ -61,12 +62,20 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          initialRoute: AppRoutes.homeScreen,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
+            progressIndicatorTheme: ProgressIndicatorThemeData(
+              color: AppColors.scenderyColor,
+              refreshBackgroundColor: AppColors.primaryColor,
+            )
+          ),
+          home: HomeScreen(repository: caseRepository),
+          // initialRoute: AppRoutes.homeScreen,
           routes: {
-            AppRoutes.homeScreen: (_) => HomeScreen(),
+            // AppRoutes.homeScreen: (_) => HomeScreen(),
             AppRoutes.aboutScreen: (_) => AboutScreen(),
             AppRoutes.profileScreen: (_) => ProfileScreen(),
-            AppRoutes.levelsScreen: (_) => CaseLevelsScreen(),
+            // AppRoutes.levelsScreen: (_) => CaseLevelsScreen(),
             AppRoutes.caesesListScreen: (_) => CasesListScreen(repository: caseRepository),
             AppRoutes.caseOverViewScreen: (context) {
               final caseId = ModalRoute.of(context)!.settings.arguments as String;
@@ -78,6 +87,7 @@ class MyApp extends StatelessWidget {
               final caseEntity = ModalRoute.of(context)!.settings.arguments as CaseEntity;
               // final caseEntity = args['case'];
               return InvestigationQuestionsScreen(
+                caseRepository: caseRepository,
                 caseEntity: caseEntity,
                 updateScoreUseCase: updateScoreUseCase,
                 scoreRepository: scoreRepository,

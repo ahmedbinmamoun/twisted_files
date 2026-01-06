@@ -8,5 +8,6 @@ class AppColors {
   static const Color hintTextColor = Color(0xB3000000);
   static const Color lightBlack = Color(0xFF2F2929);
   static const Color redColor = Color(0xFFBC3018);
+  static const Color greenColor = Color(0xFF008000);
   static const Color transparentColor = Colors.transparent;
 }

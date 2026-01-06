@@ -3,11 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:twisted_files/core/constants/app_assest.dart';
 import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
-import 'package:twisted_files/core/navigation/app_routes.dart';
+import 'package:twisted_files/core/navigation/app_navigator.dart';
+import 'package:twisted_files/domain/repositories/case_repository.dart';
+import 'package:twisted_files/features/about_screen/about_screen.dart';
 import 'package:twisted_files/features/common/widgets/primary_card.dart';
+import 'package:twisted_files/features/levels_screen/case_levels_screen.dart';
+import 'package:twisted_files/features/profile_screen/profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final CaseRepository repository;
+   HomeScreen({super.key, required this.repository});
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +32,18 @@ class HomeScreen extends StatelessWidget {
                   icon: AppAssests.folderIcon,
                    text: 'CASES FILES',
                    onPressed: () {
-                     Navigator.pushNamed(context, AppRoutes.levelsScreen);
+                    AppNavigator.push(context, CaseLevelsScreen(repository: repository,));
                    },
                    ),
                 SizedBox(height: 20.h,),
-                PrimaryCard(icon: AppAssests.infoIcon, text: 'ABOUT',onPressed: (){
-                  Navigator.pushNamed(context, AppRoutes.aboutScreen);
+                PrimaryCard(icon: AppAssests.infoIcon, text: 'ABOUT',
+                onPressed: (){
+                  AppNavigator.push(context, AboutScreen());
                 },),
                 SizedBox(height: 20.h,),
-                PrimaryCard(icon: AppAssests.oldDetectiveIcon, text: 'PROFILE',onPressed: (){
-                  Navigator.pushNamed(context, AppRoutes.profileScreen);
+                PrimaryCard(icon: AppAssests.oldDetectiveIcon, text: 'PROFILE',
+                onPressed: (){
+                  AppNavigator.push(context, ProfileScreen());
                 },),
               ],
             ),
