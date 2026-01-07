@@ -28,7 +28,8 @@ class ChooseSuspect extends StatelessWidget {
     return ChooseSuspectView(
       suspects: suspects,
       onSelect: (suspect) async {
-        await scoreCubit.solveSuspect(caseEntity);
+        final isCorrect = suspect.id == caseEntity.correctSuspectId;
+        await scoreCubit.solveSuspect(caseEntity, isCorrect);
         await scoreCubit.finalizeCase(caseEntity);
 
         AppNavigator.push(context, 
@@ -36,7 +37,7 @@ class ChooseSuspect extends StatelessWidget {
         HomeScreen(repository: caseRepository)
         );
         
-      },
+      }, correctSuspectId: caseEntity.correctSuspectId,
     );
   }
 }

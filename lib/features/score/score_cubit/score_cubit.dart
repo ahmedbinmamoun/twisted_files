@@ -38,11 +38,11 @@ class ScoreCubit extends Cubit<ScoreState> {
     emit(ScoreState(updated));
   }
 
-  Future<void> solveSuspect(CaseEntity caseEntity) async {
+  Future<void> solveSuspect(CaseEntity caseEntity, bool isCorrect) async {
     final updated = await updateScoreUseCase.call(
       currentScore: state.score,
       solvedQuestion: false,
-      solvedSuspect: true,
+      solvedSuspect: isCorrect,
       caseEntity: caseEntity, wrongQuestion: isClosed,
     );
     emit(ScoreState(updated));

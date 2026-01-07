@@ -11,6 +11,7 @@ class CaseEntity {
   final String title;
   final String summary;
   final String date;
+  final String correctSuspectId;
 
   final List<EvidenceEntity> evidences;
   final List<SuspectEntity> suspects;
@@ -26,7 +27,9 @@ class CaseEntity {
     required this.evidences,
     required this.suspects,
     required this.questions,
-    required this.date
+    required this.date,
+    required this.correctSuspectId
+
   });
 
   factory CaseEntity.empty(){
@@ -40,6 +43,9 @@ class CaseEntity {
           evidences: [],
            suspects: [],
            questions: [],
-           date: '');
+           date: '',
+           correctSuspectId: '',
+           
+           );
   }
 }
