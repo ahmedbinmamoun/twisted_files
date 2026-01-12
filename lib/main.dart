@@ -78,8 +78,8 @@ class MyApp extends StatelessWidget {
             // AppRoutes.levelsScreen: (_) => CaseLevelsScreen(),
             AppRoutes.caesesListScreen: (_) => CasesListScreen(repository: caseRepository),
             AppRoutes.caseOverViewScreen: (context) {
-              final caseId = ModalRoute.of(context)!.settings.arguments as String;
-              return CaseOverviewScreen(caseId: caseId, repository: caseRepository);
+              final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+              return CaseOverviewScreen(caseId: args['caseId'], repository: caseRepository, scoreRepository: scoreRepository,);
             },
             AppRoutes.evidenceListScreen: (_) => const EvidenceListScreen(),
             AppRoutes.evidenceDetailsScreen: (_) => const EvidenceDetailsScreen(),

@@ -4,8 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:twisted_files/core/constants/app_assest.dart';
 import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
+import 'package:twisted_files/core/navigation/app_navigator.dart';
 import 'package:twisted_files/core/navigation/app_routes.dart';
+import 'package:twisted_files/domain/entities/case_entity.dart';
 import 'package:twisted_files/domain/repositories/case_repository.dart';
+import 'package:twisted_files/features/case_overview_screen.dart/case_overView_screen.dart';
 import 'package:twisted_files/features/cases_list_screen/cubit/cases_level_cubit.dart';
 import 'package:twisted_files/features/cases_list_screen/cubit/cases_list_state.dart' hide CasesListCubit;
 import 'package:twisted_files/features/common/widgets/primary_button.dart';
@@ -65,11 +68,15 @@ class CasesListScreen extends StatelessWidget {
 
                         return PrimaryButton(
                           text: caseItem.title,
+                          
                           onPressed: () {
                             Navigator.pushNamed(
                               context,
                               AppRoutes.caseOverViewScreen,
-                              arguments: caseItem.id,
+                              arguments: {
+                                'caseId': caseItem.id,
+                                'difficulty': difficulty,
+                              },
                             );
                           },
                         );

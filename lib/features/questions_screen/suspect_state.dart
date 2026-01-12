@@ -1,30 +1,28 @@
-// // ...existing code...
-// import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-// class SuspectState {
-//   final String? selectedId;
-//   final String? correctId;
+class SuspectState {
+  final String? selectedId;
+  final String? correctId;
 
-//   SuspectState({this.selectedId, this.correctId});
+  SuspectState({this.selectedId, this.correctId});
 
-//   SuspectState copyWith({String? selectedId, String? correctId}) =>
-//       SuspectState(
-//         selectedId: selectedId ?? this.selectedId,
-//         correctId: correctId ?? this.correctId,
-//       );
-// }
+  SuspectState copyWith({String? selectedId, String? correctId}) =>
+      SuspectState(
+        selectedId: selectedId ?? this.selectedId,
+        correctId: correctId ?? this.correctId,
+      );
+}
 
-// class SuspectCubit extends Cubit<SuspectState> {
-//   SuspectCubit({String? correctSuspectId})
-//       : super(SuspectState(selectedId: null, correctId: correctSuspectId));
+class SuspectCubit extends Cubit<SuspectState> {
+  SuspectCubit({String? correctSuspectId})
+      : super(SuspectState(selectedId: null, correctId: correctSuspectId));
 
-//   void select(String id) {
-//     if (state.selectedId != null) return; // ignore if already selected
-//     emit(state.copyWith(selectedId: id));
-//   }
+  void select(String id) {
+    if (state.selectedId != null) return; // ignore if already selected
+    emit(state.copyWith(selectedId: id));
+  }
 
-//   void reset() {
-//     emit(state.copyWith(selectedId: null));
-//   }
-// }
-// // ...existing code...
+  void reset() {
+    emit(state.copyWith(selectedId: null));
+  }
+}

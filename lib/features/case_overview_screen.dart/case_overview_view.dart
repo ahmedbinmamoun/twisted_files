@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
+import 'package:twisted_files/domain/entities/case_entity.dart';
 import 'package:twisted_files/features/common/widgets/a4/a4_divider.dart';
 import 'package:twisted_files/features/common/widgets/a4/a4_header.dart';
 import 'package:twisted_files/features/common/widgets/a4/a4_page.dart';
@@ -11,10 +12,26 @@ import 'package:twisted_files/features/evidence_list_screen/evidence_list_screen
 import 'package:twisted_files/features/investigation/cubit/investigation_cubit.dart';
 import 'package:twisted_files/features/investigation/cubit/investigation_state.dart';
 import 'package:twisted_files/features/notes/notes_fab.dart';
+import 'package:twisted_files/features/score/score_cubit/score_cubit.dart';
 
 
 class CaseOverviewView extends StatelessWidget {
-  const CaseOverviewView({super.key});
+  // String difficulty;
+   CaseOverviewView({super.key,
+    // required this.difficulty
+   });
+
+  void _startCase(BuildContext context, CaseEntity caseEntity) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: context.read<InvestigationCubit>(),
+          child: const EvidenceListScreen(),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +46,12 @@ class CaseOverviewView extends StatelessWidget {
         if (state is InvestigationLoaded) {
           final caseEntity = state.caseEntity;
 
+          final scoreCubit = context.watch<ScoreCubit>();
+          final isCompleted = scoreCubit.state.isCaseCompleted;
+          final oldScore = context.read<ScoreCubit>().state.previousCaseScore;
+
           return Scaffold(
             floatingActionButton: NotesFab(caseId: caseEntity.id),
-
             body: SafeArea(
               child: Padding(
                 padding: EdgeInsets.all(16.w),
@@ -57,17 +77,42 @@ class CaseOverviewView extends StatelessWidget {
                       SizedBox(height: 32.h),
 
                       PrimaryButton(
-                        text: 'SHOW EVIDENCES',
+                        text: isCompleted
+                            ? 'Re-Investigation'
+                            : 'Start Investigation',
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => BlocProvider.value(
-                                value: context.read<InvestigationCubit>(),
-                                child: const EvidenceListScreen(),
+                          if (!isCompleted) {
+                            _startCase(context, caseEntity);
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                title: const Text('Re-Investigation'),
+                                content: Text(
+                                  'Previous score: $oldScore\n\n'
+                                  'This will reset this case score.',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: const Text('Cancel'),
+                                    onPressed: () =>
+                                        Navigator.pop(context),
+                                  ),
+                                  TextButton(
+                                    child: const Text('Confirm'),
+                                    onPressed: () async {
+                                      await context
+                                          .read<ScoreCubit>()
+                                          .resetCase(caseEntity);
+
+                                      Navigator.pop(context);
+                                      _startCase(context, caseEntity);
+                                    },
+                                  ),
+                                ],
                               ),
-                            ),
-                          );
+                            );
+                          }
                         },
                       ),
                     ],
