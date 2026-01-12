@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class CaseResultEntity {
   final String caseNumber;
   final String caseTitle;

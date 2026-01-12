@@ -18,7 +18,7 @@ class SuspectCubit extends Cubit<SuspectState> {
       : super(SuspectState(selectedId: null, correctId: correctSuspectId));
 
   void select(String id) {
-    if (state.selectedId != null) return; // ignore if already selected
+    if (state.selectedId != null) return; 
     emit(state.copyWith(selectedId: id));
   }
 
