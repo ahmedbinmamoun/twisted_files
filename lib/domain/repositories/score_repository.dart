@@ -1,9 +1,12 @@
+import 'package:twisted_files/domain/entities/case_progress_entity.dart';
 import 'package:twisted_files/domain/entities/score_entity.dart';
 
 abstract class ScoreRepository {
   Future<ScoreEntity> getScore();
   Future<void> saveScore(ScoreEntity score);
 
-  Future<int> getCaseScore(String caseId);
-  Future<void> saveCaseScore(String caseId, int score);
+  Future<CaseProgressEntity?> getCaseProgress(String caseId);
+  Future<void> saveCaseProgress(CaseProgressEntity progress);
+
+  Future<void> resetCase(String caseId);
 }

@@ -21,42 +21,48 @@ class UpdateScoreUseCase {
         case 'difficult':
           return CaseDifficultyEntity.hard;
         default:
-          return CaseDifficultyEntity.easy; 
+          return CaseDifficultyEntity.easy;
       }
     }
     return CaseDifficultyEntity.easy;
+  }
+
+  int difficultyMultiplier(CaseDifficultyEntity difficulty) {
+    switch (difficulty) {
+      case CaseDifficultyEntity.easy: return 1;
+      case CaseDifficultyEntity.medium: return 2;
+      case CaseDifficultyEntity.hard: return 3;
+    }
   }
 
   Future<ScoreEntity> call({
     required ScoreEntity currentScore,
     required bool solvedQuestion,
     required bool solvedSuspect,
-    required bool wrongQuestion, 
+    required bool wrongQuestion,
     required CaseEntity caseEntity,
   }) async {
-    print('DEBUG: UpdateScoreUseCase.call current=${currentScore.totalScore} '
-          'solvedQ=$solvedQuestion solvedS=$solvedSuspect difficulty=${caseEntity.difficulty}');
     final difficulty = _parseDifficulty(caseEntity.difficulty);
-    int multiplier = difficultyMultiplier(difficulty);
+    final multiplier = difficultyMultiplier(difficulty);
 
     int questionPoints = currentScore.questionPoints;
     int suspectPoints = currentScore.suspectPoints;
     int totalScore = currentScore.totalScore;
 
+    // ✅ الإجابة الصحيحة
     if (solvedQuestion) {
       questionPoints += 10 * multiplier;
       totalScore += 10 * multiplier;
     }
 
+    // ❌ الإجابة الخاطئة
     if (wrongQuestion) {
       final penalty = 20 * multiplier;
-      questionPoints -=  penalty;
-      totalScore -=  penalty;
-
-      // if (questionPoints < 0) questionPoints = 0;
-      // if (totalScore < 0) totalScore = 0;
+      questionPoints = (questionPoints - penalty).clamp(0, double.infinity).toInt();
+      totalScore = (totalScore - penalty).clamp(0, double.infinity).toInt();
     }
 
+    // ✅ حل المشتبه الصحيح
     if (solvedSuspect) {
       suspectPoints += 50 * multiplier;
       totalScore += 50 * multiplier;

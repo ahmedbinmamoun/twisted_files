@@ -29,9 +29,7 @@ class InvestigationQuestionsScreen extends StatelessWidget {
         BlocProvider(create: (_) => QuestionsCubit()),
         BlocProvider(
           create: (_) => ScoreCubit(
-            updateScoreUseCase,
-            scoreRepository,
-            activeCaseId: caseEntity.id,
+            activeCaseId: caseEntity.id, repository: scoreRepository, useCase: UpdateScoreUseCase(scoreRepository),
           ),
         ),
       ],
