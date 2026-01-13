@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
-import 'package:twisted_files/core/navigation/app_navigator.dart';
 import 'package:twisted_files/core/navigation/app_routes.dart';
 import 'package:twisted_files/domain/entities/case_result_entity.dart';
 import 'package:twisted_files/features/common/widgets/primary_button.dart';
@@ -89,9 +88,7 @@ class CaseResultDialog extends StatelessWidget {
                 result.isSuccess
                     ? 'The truth always leaves a trace.'
                     : 'Not every case is Solved on first try',
-                style: AppStyles.mediumBody.copyWith(
-                  fontStyle: FontStyle.italic,
-                ),
+                style: AppStyles.mediumBody,
                 textAlign: TextAlign.center,
               ),
             ),
@@ -105,12 +102,6 @@ class CaseResultDialog extends StatelessWidget {
                 Navigator.popUntil(context, (route){
                   return route.settings.name == AppRoutes.caesesListScreen;
                 });
-                // (
-                //   context,
-                //   AppRoutes.caesesListScreen,
-                //   (route) => false,
-                //   arguments: result.returnRoute,
-                // );
               },
             ),
           ],

@@ -130,28 +130,30 @@ class ScoreCubit extends Cubit<ScoreState> {
   Future<void> resetCase(CaseEntity caseEntity) async {
     if (activeCaseId == null) return;
 
-    final progress = await repository.getCaseProgress(activeCaseId!);
-    if (progress == null || !progress.completed) return;
+    try {
+      print('DEBUG: resetCase called for case=$activeCaseId baseline=$_sessionStartTotal current=${state.score.totalScore}');
 
-    final oldScore = progress.caseScore;
-    final newTotal = state.score.totalScore - oldScore;
+      await repository.resetCase(activeCaseId!);
 
-    await repository.resetCase(activeCaseId!);
+      final restoredScore = ScoreEntity(
+        totalScore: _sessionStartTotal,
+        questionPoints: 0,
+        suspectPoints: 0,
+      );
 
-    final resetScore = state.score.copyWith(
-      totalScore: newTotal,
-      questionPoints: 0,
-      suspectPoints: 0,
-    );
+      await repository.saveScore(restoredScore);
 
-    await repository.saveScore(resetScore);
+      emit(state.copyWith(
+        score: restoredScore,
+        isCaseCompleted: false,
+        previousCaseScore: 0,
+      ));
 
-    emit(state.copyWith(
-      score: resetScore,
-      isCaseCompleted: false,
-      previousCaseScore: 0,
-    ));
-
-    _sessionStartTotal = newTotal;
+      _sessionStartTotal = restoredScore.totalScore;
+      print('DEBUG: resetCase completed restored=${restoredScore.totalScore}');
+    } catch (e, st) {
+      print('ERROR: resetCase failed -> $e\n$st');
+    }
+  
   }
 }

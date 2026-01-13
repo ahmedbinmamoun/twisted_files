@@ -3,10 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:twisted_files/core/constants/app_assest.dart';
 import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
-import 'package:twisted_files/core/navigation/app_navigator.dart';
 import 'package:twisted_files/core/navigation/app_routes.dart';
 import 'package:twisted_files/domain/repositories/case_repository.dart';
-import 'package:twisted_files/features/cases_list_screen/cases_list_screen.dart';
 import 'package:twisted_files/features/common/widgets/primary_card.dart';
 
 class CaseLevelsScreen extends StatelessWidget {

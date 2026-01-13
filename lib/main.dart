@@ -17,7 +17,6 @@ import 'package:twisted_files/features/cases_list_screen/cases_list_screen.dart'
 import 'package:twisted_files/features/evidence_details_screen/evidence_details_scree.dart';
 import 'package:twisted_files/features/evidence_list_screen/evidence_list_screen.dart';
 import 'package:twisted_files/features/home_screen/home_screen.dart';
-import 'package:twisted_files/features/levels_screen/case_levels_screen.dart';
 import 'package:twisted_files/features/profile_screen/profile_screen.dart';
 import 'package:twisted_files/features/questions_screen/investigation_questions_screen.dart';
 

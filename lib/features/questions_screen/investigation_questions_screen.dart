@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:twisted_files/domain/entities/case_entity.dart';
@@ -22,6 +23,39 @@ class InvestigationQuestionsScreen extends StatelessWidget {
     required this.caseRepository,
   });
 
+  Future<bool> _onWillPop(BuildContext context) async {
+    final scoreCubit = context.read<ScoreCubit>();
+
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return CupertinoAlertDialog(
+          title: const Text('Exit Investigation'),
+          content: const Text(
+            'If you leave now, your progress and score for this case will be lost.\n\nDo you want to exit?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await scoreCubit.resetCase(caseEntity);
+                Navigator.of(dialogContext).pop(true);
+              },
+              child: const Text('Exit'),
+            ),
+          ],
+        );
+      },
+    );
+
+    return result ?? false;
+  }
+
+ 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -29,11 +63,23 @@ class InvestigationQuestionsScreen extends StatelessWidget {
         BlocProvider(create: (_) => QuestionsCubit()),
         BlocProvider(
           create: (_) => ScoreCubit(
-            activeCaseId: caseEntity.id, repository: scoreRepository, useCase: UpdateScoreUseCase(scoreRepository),
+            activeCaseId: caseEntity.id,
+            repository: scoreRepository,
+            useCase: UpdateScoreUseCase(scoreRepository),
           ),
         ),
       ],
-      child: QuestionsView(caseEntity: caseEntity, caseRepository: caseRepository,),
+      child: Builder(
+        builder: (innerContext) {
+          return WillPopScope(
+            onWillPop: () => _onWillPop(innerContext),
+            child: QuestionsView(
+              caseEntity: caseEntity,
+              caseRepository: caseRepository,
+            ),
+          );
+        }
+      ),
     );
   }
 }

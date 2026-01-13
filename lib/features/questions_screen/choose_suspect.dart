@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:twisted_files/core/navigation/app_routes.dart';
 import 'package:twisted_files/domain/entities/case_entity.dart';
 import 'package:twisted_files/domain/entities/case_result_entity.dart';
 import 'package:twisted_files/domain/entities/suspect_entity.dart';
 import 'package:twisted_files/domain/repositories/case_repository.dart';
-import 'package:twisted_files/features/cases_list_screen/cases_list_screen.dart';
 import 'package:twisted_files/features/questions_screen/choose_suspect_view.dart';
 import 'package:twisted_files/features/result_dialog/case_result_dialog.dart';
 import 'package:twisted_files/features/score/score_cubit/score_cubit.dart';
@@ -24,9 +22,7 @@ class ChooseSuspect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ...existing code...
     return Builder(
-      // <<< نستخدم Builder للحصول على context صحيح
       builder: (innerContext) {
         final scoreCubit = innerContext.read<ScoreCubit>();
 
@@ -79,7 +75,6 @@ class ChooseSuspect extends StatelessWidget {
               print('DEBUG: after showDialog');
             } catch (e, st) {
               print('ERROR ChooseSuspect.onSelect: $e\n$st');
-              // show a visible error so you can see it in UI while debugging
               ScaffoldMessenger.of(
                 innerContext,
               ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));

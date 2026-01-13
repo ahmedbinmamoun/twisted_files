@@ -49,20 +49,17 @@ class UpdateScoreUseCase {
     int suspectPoints = currentScore.suspectPoints;
     int totalScore = currentScore.totalScore;
 
-    // ✅ الإجابة الصحيحة
     if (solvedQuestion) {
       questionPoints += 10 * multiplier;
       totalScore += 10 * multiplier;
     }
 
-    // ❌ الإجابة الخاطئة
     if (wrongQuestion) {
       final penalty = 20 * multiplier;
       questionPoints = (questionPoints - penalty).clamp(0, double.infinity).toInt();
       totalScore = (totalScore - penalty).clamp(0, double.infinity).toInt();
     }
 
-    // ✅ حل المشتبه الصحيح
     if (solvedSuspect) {
       suspectPoints += 50 * multiplier;
       totalScore += 50 * multiplier;
