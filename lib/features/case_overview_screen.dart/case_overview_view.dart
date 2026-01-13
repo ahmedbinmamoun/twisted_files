@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:twisted_files/core/constants/app_assest.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
 import 'package:twisted_files/domain/entities/case_entity.dart';
 import 'package:twisted_files/features/common/widgets/a4/a4_divider.dart';
@@ -52,73 +53,83 @@ class CaseOverviewView extends StatelessWidget {
 
           return Scaffold(
             floatingActionButton: NotesFab(caseId: caseEntity.id),
-            body: SafeArea(
-              child: Padding(
-                padding: EdgeInsets.all(16.w),
-                child: A4Page(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      A4Header(
-                        caseNumber: caseEntity.caseNumber,
-                        date: caseEntity.date,
-                        location: caseEntity.location,
-                        title: caseEntity.title,
-                      ),
-
-                      const A4Divider(),
-                      const A4SectionTitle('Case Summary'),
-
-                      Text(
-                        caseEntity.summary,
-                        style: AppStyles.mediumBody,
-                      ),
-
-                      SizedBox(height: 32.h),
-
-                      PrimaryButton(
-                        text: isCompleted
-                            ? 'Re-Investigation'
-                            : 'Start Investigation',
-                        onPressed: () {
-                          if (!isCompleted) {
-                            _startCase(context, caseEntity);
-                          } else {
-                            showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                title: const Text('Re-Investigation'),
-                                content: Text(
-                                  'Previous score: $oldScore\n\n'
-                                  'This will reset this case score.',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    child: const Text('Cancel'),
-                                    onPressed: () =>
-                                        Navigator.pop(context),
+            body: Stack(
+              children: [
+                SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.w),
+                    child: A4Page(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          A4Header(
+                            caseNumber: caseEntity.caseNumber,
+                            date: caseEntity.date,
+                            location: caseEntity.location,
+                            title: caseEntity.title,
+                          ),
+                
+                          const A4Divider(),
+                          const A4SectionTitle('Case Summary'),
+                
+                          Text(
+                            caseEntity.summary,
+                            style: AppStyles.mediumBody,
+                          ),
+                
+                          SizedBox(height: 32.h),
+                
+                          PrimaryButton(
+                            text: isCompleted
+                                ? 'Re-Investigation'
+                                : 'Show Evidences',
+                            onPressed: () {
+                              if (!isCompleted) {
+                                _startCase(context, caseEntity);
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                    title: const Text('Re-Investigation'),
+                                    content: Text(
+                                      'Previous score: $oldScore\n\n'
+                                      'This will reset this case score.',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text('Cancel'),
+                                        onPressed: () =>
+                                            Navigator.pop(context),
+                                      ),
+                                      TextButton(
+                                        child: const Text('Confirm'),
+                                        onPressed: () async {
+                                          await context
+                                              .read<ScoreCubit>()
+                                              .resetCase(caseEntity);
+                
+                                          Navigator.pop(context);
+                                          _startCase(context, caseEntity);
+                                        },
+                                      ),
+                                    ],
                                   ),
-                                  TextButton(
-                                    child: const Text('Confirm'),
-                                    onPressed: () async {
-                                      await context
-                                          .read<ScoreCubit>()
-                                          .resetCase(caseEntity);
-
-                                      Navigator.pop(context);
-                                      _startCase(context, caseEntity);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
+                                );
+                              }
+                            },
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+                Visibility(
+                  visible: isCompleted,
+                  child: Center(
+                    child: Image.asset(AppAssests.caseClosedStiker),
+                  ),
+                )
+              ],
             ),
           );
         }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twisted_files/core/constants/app_colors.dart';
@@ -19,6 +20,7 @@ import 'package:twisted_files/features/evidence_list_screen/evidence_list_screen
 import 'package:twisted_files/features/home_screen/home_screen.dart';
 import 'package:twisted_files/features/profile_screen/profile_screen.dart';
 import 'package:twisted_files/features/questions_screen/investigation_questions_screen.dart';
+import 'package:twisted_files/features/score/score_cubit/score_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,40 +61,45 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
-            progressIndicatorTheme: ProgressIndicatorThemeData(
-              color: AppColors.scenderyColor,
-              refreshBackgroundColor: AppColors.primaryColor,
-            )
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => ScoreCubit(useCase: updateScoreUseCase, repository: scoreRepository)),
+          ],
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
+              progressIndicatorTheme: ProgressIndicatorThemeData(
+                color: AppColors.scenderyColor,
+                refreshBackgroundColor: AppColors.primaryColor,
+              )
+            ),
+            home: HomeScreen(repository: caseRepository),
+            // initialRoute: AppRoutes.homeScreen,
+            routes: {
+              // AppRoutes.homeScreen: (_) => HomeScreen(),
+              AppRoutes.aboutScreen: (_) => AboutScreen(),
+              AppRoutes.profileScreen: (_) => ProfileScreen(),
+              // AppRoutes.levelsScreen: (_) => CaseLevelsScreen(),
+              AppRoutes.caesesListScreen: (_) => CasesListScreen(repository: caseRepository),
+              AppRoutes.caseOverViewScreen: (context) {
+                final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+                return CaseOverviewScreen(caseId: args['caseId'], repository: caseRepository, scoreRepository: scoreRepository,);
+              },
+              AppRoutes.evidenceListScreen: (_) => const EvidenceListScreen(),
+              AppRoutes.evidenceDetailsScreen: (_) => const EvidenceDetailsScreen(),
+              AppRoutes.investigationQuestionsScreen: (context) {
+                final caseEntity = ModalRoute.of(context)!.settings.arguments as CaseEntity;
+                // final caseEntity = args['case'];
+                return InvestigationQuestionsScreen(
+                  caseRepository: caseRepository,
+                  caseEntity: caseEntity,
+                  updateScoreUseCase: updateScoreUseCase,
+                  scoreRepository: scoreRepository,
+                );
+              },
+            },
           ),
-          home: HomeScreen(repository: caseRepository),
-          // initialRoute: AppRoutes.homeScreen,
-          routes: {
-            // AppRoutes.homeScreen: (_) => HomeScreen(),
-            AppRoutes.aboutScreen: (_) => AboutScreen(),
-            AppRoutes.profileScreen: (_) => ProfileScreen(),
-            // AppRoutes.levelsScreen: (_) => CaseLevelsScreen(),
-            AppRoutes.caesesListScreen: (_) => CasesListScreen(repository: caseRepository),
-            AppRoutes.caseOverViewScreen: (context) {
-              final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-              return CaseOverviewScreen(caseId: args['caseId'], repository: caseRepository, scoreRepository: scoreRepository,);
-            },
-            AppRoutes.evidenceListScreen: (_) => const EvidenceListScreen(),
-            AppRoutes.evidenceDetailsScreen: (_) => const EvidenceDetailsScreen(),
-            AppRoutes.investigationQuestionsScreen: (context) {
-              final caseEntity = ModalRoute.of(context)!.settings.arguments as CaseEntity;
-              // final caseEntity = args['case'];
-              return InvestigationQuestionsScreen(
-                caseRepository: caseRepository,
-                caseEntity: caseEntity,
-                updateScoreUseCase: updateScoreUseCase,
-                scoreRepository: scoreRepository,
-              );
-            },
-          },
         );
       },
     );

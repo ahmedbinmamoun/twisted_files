@@ -29,6 +29,8 @@ class ScoreState {
   }
 }
 
+
+
 class ScoreCubit extends Cubit<ScoreState> {
   final ScoreRepository repository;
   final UpdateScoreUseCase useCase;
@@ -130,11 +132,16 @@ class ScoreCubit extends Cubit<ScoreState> {
   Future<void> resetCase(CaseEntity caseEntity) async {
     if (activeCaseId == null) return;
 
+    // Always remove any saved case progress and revert overall score
+    // back to the baseline when the case was opened (_sessionStartTotal).
+    // This discards any answers made in the current session.
     try {
       print('DEBUG: resetCase called for case=$activeCaseId baseline=$_sessionStartTotal current=${state.score.totalScore}');
 
+      // remove stored per-case progress (if any)
       await repository.resetCase(activeCaseId!);
 
+      // restore overall score to the baseline captured at session start
       final restoredScore = ScoreEntity(
         totalScore: _sessionStartTotal,
         questionPoints: 0,
@@ -149,6 +156,7 @@ class ScoreCubit extends Cubit<ScoreState> {
         previousCaseScore: 0,
       ));
 
+      // keep session baseline aligned with restored total
       _sessionStartTotal = restoredScore.totalScore;
       print('DEBUG: resetCase completed restored=${restoredScore.totalScore}');
     } catch (e, st) {
