@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
+import 'package:twisted_files/domain/entities/profile_stats_entity.dart';
 
 class DetectiveCard extends StatelessWidget {
-  const DetectiveCard({super.key});
+  final ProfileStatsEntity stats;
+
+  const DetectiveCard({super.key, required this.stats});
 
   @override
   Widget build(BuildContext context) {
+    final totalSolved =
+        stats.easySolved + stats.mediumSolved + stats.hardSolved;
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(16.w),
@@ -29,8 +35,10 @@ class DetectiveCard extends StatelessWidget {
           SizedBox(height: 12.h),
 
           _row('Department', 'Special Crimes'),
-          _row('Clearance Level', 'Level 3'),
-          _row('Cases Solved', '27'),
+          _row('Cases Solved', totalSolved.toString()),
+          _row('Easy Cases Solved', stats.easySolved.toString()),
+          _row('Medium Cases Solved', stats.mediumSolved.toString()),
+          _row('Hard Cases Solved', stats.hardSolved.toString()),
           _row('Status', 'Active'),
         ],
       ),

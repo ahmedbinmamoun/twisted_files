@@ -11,6 +11,7 @@ import 'package:twisted_files/data/repositories/score_repository_impl.dart';
 import 'package:twisted_files/domain/entities/case_entity.dart';
 import 'package:twisted_files/domain/repositories/case_repository.dart';
 import 'package:twisted_files/domain/repositories/score_repository.dart';
+import 'package:twisted_files/domain/use_cases/get_profile_stats_use_case.dart';
 import 'package:twisted_files/domain/use_cases/update_score_use_case.dart';
 import 'package:twisted_files/features/about_screen/about_screen.dart';
 import 'package:twisted_files/features/case_overview_screen.dart/case_overView_screen.dart';
@@ -18,6 +19,7 @@ import 'package:twisted_files/features/cases_list_screen/cases_list_screen.dart'
 import 'package:twisted_files/features/evidence_details_screen/evidence_details_scree.dart';
 import 'package:twisted_files/features/evidence_list_screen/evidence_list_screen.dart';
 import 'package:twisted_files/features/home_screen/home_screen.dart';
+import 'package:twisted_files/features/profile_screen/cubit/profile_cubit.dart';
 import 'package:twisted_files/features/profile_screen/profile_screen.dart';
 import 'package:twisted_files/features/questions_screen/investigation_questions_screen.dart';
 import 'package:twisted_files/features/score/score_cubit/score_cubit.dart';
@@ -27,18 +29,20 @@ Future<void> main() async {
 
   final sharedPreferences = await SharedPreferences.getInstance();
 
-  final localCaseDataSource = LocalCaseDataSourceImpl();
+  final localCaseDataSource = LocalCaseDataSourceImpl(sharedPreferences);
   final localScoreDataSource = LocalScoreDataSourceImpl(sharedPreferences);
 
   final CaseRepository caseRepository = CaseRepositoryImpl(localCaseDataSource);
   final ScoreRepository scoreRepository = ScoreRepositoryImpl(localScoreDataSource);
 
   final updateScoreUseCase = UpdateScoreUseCase(scoreRepository);
+  final getCaseStats = GetProfileStatsUseCase(scoreRepository);
 
   runApp(MyApp(
     caseRepository: caseRepository,
     updateScoreUseCase: updateScoreUseCase,
     scoreRepository: scoreRepository,
+    getCaseStats: getCaseStats,
   ));
 }
 
@@ -46,12 +50,14 @@ class MyApp extends StatelessWidget {
   final CaseRepository caseRepository;
   final UpdateScoreUseCase updateScoreUseCase;
   final ScoreRepository scoreRepository;
+  final GetProfileStatsUseCase getCaseStats;
 
   const MyApp({
     super.key,
     required this.caseRepository,
     required this.updateScoreUseCase,
-    required this.scoreRepository
+    required this.scoreRepository,
+    required this.getCaseStats
   });
 
   @override
@@ -64,6 +70,7 @@ class MyApp extends StatelessWidget {
         return MultiBlocProvider(
           providers: [
             BlocProvider(create: (_) => ScoreCubit(useCase: updateScoreUseCase, repository: scoreRepository)),
+            BlocProvider(create: (_) => ProfileCubit(scoreRepository: scoreRepository, getCaseStats: getCaseStats))
           ],
           child: MaterialApp(
             debugShowCheckedModeBanner: false,

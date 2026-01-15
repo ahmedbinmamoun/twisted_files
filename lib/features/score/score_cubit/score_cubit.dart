@@ -29,8 +29,6 @@ class ScoreState {
   }
 }
 
-
-
 class ScoreCubit extends Cubit<ScoreState> {
   final ScoreRepository repository;
   final UpdateScoreUseCase useCase;
@@ -43,14 +41,14 @@ class ScoreCubit extends Cubit<ScoreState> {
     required this.repository,
     this.activeCaseId,
   }) : super(
-          ScoreState(
-            score: ScoreEntity(
-              totalScore: 0,
-              questionPoints: 0,
-              suspectPoints: 0,
-            ),
-          ),
-        ) {
+         ScoreState(
+           score: ScoreEntity(
+             totalScore: 0,
+             questionPoints: 0,
+             suspectPoints: 0,
+           ),
+         ),
+       ) {
     _init();
   }
 
@@ -63,7 +61,15 @@ class ScoreCubit extends Cubit<ScoreState> {
       return;
     }
 
-    final progress = await repository.getCaseProgress(activeCaseId!);
+    final cases = await repository.getAllCompletedCases();
+
+    CaseProgressEntity? progress;
+    for (final c in cases) {
+      if (c.caseId == activeCaseId) {
+        progress = c;
+        break;
+      }
+    }
 
     emit(
       state.copyWith(
@@ -115,15 +121,13 @@ class ScoreCubit extends Cubit<ScoreState> {
         caseId: activeCaseId!,
         completed: true,
         caseScore: sessionGain,
+        difficulty: caseEntity.difficulty,
       ),
     );
 
     await repository.saveScore(state.score);
 
-    emit(state.copyWith(
-      isCaseCompleted: true,
-      previousCaseScore: sessionGain,
-    ));
+    emit(state.copyWith(isCaseCompleted: true, previousCaseScore: sessionGain));
 
     _sessionStartTotal = state.score.totalScore;
   }
@@ -136,7 +140,9 @@ class ScoreCubit extends Cubit<ScoreState> {
     // back to the baseline when the case was opened (_sessionStartTotal).
     // This discards any answers made in the current session.
     try {
-      print('DEBUG: resetCase called for case=$activeCaseId baseline=$_sessionStartTotal current=${state.score.totalScore}');
+      print(
+        'DEBUG: resetCase called for case=$activeCaseId baseline=$_sessionStartTotal current=${state.score.totalScore}',
+      );
 
       // remove stored per-case progress (if any)
       await repository.resetCase(activeCaseId!);
@@ -150,11 +156,13 @@ class ScoreCubit extends Cubit<ScoreState> {
 
       await repository.saveScore(restoredScore);
 
-      emit(state.copyWith(
-        score: restoredScore,
-        isCaseCompleted: false,
-        previousCaseScore: 0,
-      ));
+      emit(
+        state.copyWith(
+          score: restoredScore,
+          isCaseCompleted: false,
+          previousCaseScore: 0,
+        ),
+      );
 
       // keep session baseline aligned with restored total
       _sessionStartTotal = restoredScore.totalScore;
@@ -162,6 +170,5 @@ class ScoreCubit extends Cubit<ScoreState> {
     } catch (e, st) {
       print('ERROR: resetCase failed -> $e\n$st');
     }
-  
   }
 }

@@ -66,7 +66,6 @@ class ChooseSuspect extends StatelessWidget {
                       suspectBonus: score.suspectPoints,
                       totalScore: score.totalScore,
                       rank: 869,
-                      returnRoute: caseEntity.difficulty.toString(), 
                     ),
                   );
                 },

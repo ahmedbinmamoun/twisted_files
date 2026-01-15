@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:twisted_files/data/models/case_progress_model.dart';
 import 'local_score_data_source.dart';
 
 class LocalScoreDataSourceImpl implements LocalScoreDataSource {
@@ -6,6 +8,7 @@ class LocalScoreDataSourceImpl implements LocalScoreDataSource {
   LocalScoreDataSourceImpl(this.prefs);
 
   static const _scoreKey = 'total_score';
+  static const _casesKey = 'cases_progress';
   String caseScoreKey(String caseId) => 'case_score$caseId';
   String caseCompletedKey(String caseId) => 'case_completed$caseId';
 
@@ -35,13 +38,39 @@ class LocalScoreDataSourceImpl implements LocalScoreDataSource {
   }
 
   @override
-  Future<void> saveCaseCompleted(String caseId, bool completed) async {
-    await prefs.setBool(caseCompletedKey(caseId), completed);
-  }
-
-  @override
   Future<void> resetCase(String caseId) async {
     await prefs.remove(caseScoreKey(caseId));
     await prefs.remove(caseCompletedKey(caseId));
   }
+
+ @override
+Future<void> saveCaseProgress(CaseProgressModel model) async {
+  final list = _getAllCases();
+
+  list.removeWhere((e) => e.caseId == model.caseId);
+  list.add(model);
+
+  await prefs.setString(
+    _casesKey,
+    jsonEncode(list.map((e) => e.toJson()).toList()),
+  );
+}
+
+@override
+Future<List<CaseProgressModel>> getAllCompletedCases() async {
+  final list = _getAllCases();
+  return list.where((e) => e.completed).toList();
+}
+
+List<CaseProgressModel> _getAllCases() {
+    final jsonString = prefs.getString(_casesKey);
+    if (jsonString == null) return [];
+
+    final List decoded = json.decode(jsonString);
+    return decoded
+        .map((e) => CaseProgressModel.fromJson(e))
+        .toList();
+  }
+
+ 
 }

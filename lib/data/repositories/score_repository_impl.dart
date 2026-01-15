@@ -1,4 +1,5 @@
 import 'package:twisted_files/data/data_source/local_score_data_source.dart';
+import 'package:twisted_files/data/mapper/case_progress_mapper.dart';
 import 'package:twisted_files/domain/entities/case_progress_entity.dart';
 import 'package:twisted_files/domain/entities/score_entity.dart';
 import 'package:twisted_files/domain/repositories/score_repository.dart';
@@ -32,27 +33,25 @@ class ScoreRepositoryImpl implements ScoreRepository {
     await localDataSource.saveCaseScore(caseId, score);
   }
 
-  @override
-  Future<CaseProgressEntity?> getCaseProgress(String caseId) async {
-    final completed = await localDataSource.getCaseCompleted(caseId);
-    if (completed == null) return null;
-
-    final score = await getCaseScore(caseId);
-    return CaseProgressEntity(
-      caseId: caseId,
-      completed: completed,
-      caseScore: score,
-    );
-  }
+  
 
   @override
-  Future<void> saveCaseProgress(CaseProgressEntity progress) async {
-    await localDataSource.saveCaseScore(progress.caseId, progress.caseScore);
-    await localDataSource.saveCaseCompleted(progress.caseId, progress.completed);
-  }
+Future<void> saveCaseProgress(CaseProgressEntity progress) async {
+  final model = CaseProgressMapper.toModel(progress);
+  await localDataSource.saveCaseProgress(model);
+}
 
   @override
   Future<void> resetCase(String caseId) async {
     await localDataSource.resetCase(caseId);
   }
+  
+  @override
+  Future<List<CaseProgressEntity>> getAllCompletedCases() async {
+  final models = await localDataSource.getAllCompletedCases();
+
+  return models.map(CaseProgressMapper.toEntity).toList();
+}
+  
+  
 }
