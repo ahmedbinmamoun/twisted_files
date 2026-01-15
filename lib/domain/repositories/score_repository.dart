@@ -5,8 +5,10 @@ abstract class ScoreRepository {
   Future<ScoreEntity> getScore();
   Future<void> saveScore(ScoreEntity score);
 
-  Future<CaseProgressEntity?> getCaseProgress(String caseId);
+  // Future<CaseProgressEntity?> getCaseProgress(String caseId);
   Future<void> saveCaseProgress(CaseProgressEntity progress);
 
   Future<void> resetCase(String caseId);
+
+  Future<List<CaseProgressEntity>> getAllCompletedCases();
 }

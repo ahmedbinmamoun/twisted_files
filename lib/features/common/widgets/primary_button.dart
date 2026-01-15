@@ -4,11 +4,13 @@ import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
 
 class PrimaryButton extends StatelessWidget {
-   PrimaryButton({super.key, required this.text, required this.onPressed, this.backgroundColor, this.borderColor});
-   String text;
+   PrimaryButton({super.key,  this.text, required this.onPressed, this.backgroundColor, this.borderColor, this.useWidget = false , this.widget});
+   String? text;
    VoidCallback? onPressed;
    Color? backgroundColor;
    Color? borderColor;
+   Widget? widget;
+   bool useWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class PrimaryButton extends StatelessWidget {
           
         ),
         child: Center(
-             child: Text(text,
+             child: useWidget ? widget : Text(text!,
              maxLines: null,
              softWrap: true,
              style: AppStyles.mediumButtonText.copyWith(

@@ -1,7 +1,9 @@
 import 'package:twisted_files/data/models/evidence_model.dart';
 import 'package:twisted_files/data/models/qustion_model.dart';
 import 'package:twisted_files/data/models/suspect_model.dart';
+import 'package:twisted_files/domain/entities/case_difficulty_entity.dart';
 import 'package:twisted_files/domain/entities/case_entity.dart';
+import 'package:twisted_files/domain/entities/case_unlock_role_entity.dart';
 
 class CaseModel {
   final String id;
@@ -15,6 +17,7 @@ class CaseModel {
   final List<EvidenceModel> evidences;
   final List<SuspectModel> suspects;
   final List<QuestionModel> questions;
+  final int requiredScore;
 
   CaseModel({
     required this.id,
@@ -28,6 +31,7 @@ class CaseModel {
     required this.questions,
     required this.date,
     required this.correctSuspectId,
+    required this.requiredScore
   });
 
   factory CaseModel.fromJson(Map<String, dynamic> json) {
@@ -48,7 +52,7 @@ class CaseModel {
           .toList(),
       questions: (json['questions'] as List)
           .map((questions) => QuestionModel.fromJson(questions))
-          .toList(),
+          .toList(), requiredScore: json['required_score'] ?? 0,
     );
   }
 
@@ -57,7 +61,7 @@ class CaseModel {
       id: id,
       caseNumber: caseNumber,
       location: location,
-      difficulty: difficulty,
+      difficulty: _mapDifficulty(difficulty),
       title: title,
       date: date,
       summary: summary,
@@ -65,6 +69,20 @@ class CaseModel {
       evidences: evidences.map((evidence) => evidence.toEntity()).toList(),
       suspects: suspects.map((suspects) => suspects.toEntity()).toList(),
       questions: questions.map((questions) => questions.toEntity()).toList(),
+       unlockRole: CaseUnlockRoleEntity(requiredScore: requiredScore),
     );
+  }
+
+  CaseDifficultyEntity _mapDifficulty(String diff){
+    switch (diff.toLowerCase()) {
+      case 'easy': 
+      return CaseDifficultyEntity.easy;
+      case 'medium': 
+      return CaseDifficultyEntity.medium;
+      case 'hard': 
+      return CaseDifficultyEntity.hard;
+        
+      default: return CaseDifficultyEntity.easy;
+    }
   }
 }

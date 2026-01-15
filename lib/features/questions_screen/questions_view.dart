@@ -7,7 +7,7 @@ import 'package:twisted_files/domain/entities/case_entity.dart';
 import 'package:twisted_files/domain/repositories/case_repository.dart';
 import 'package:twisted_files/features/common/animations/animated_question.dart';
 import 'package:twisted_files/features/notes/notes_fab.dart';
-import 'package:twisted_files/features/questions_screen/choose_suspect.dart';
+import 'package:twisted_files/features/questions_screen/choose_suspect/choose_suspect.dart';
 import 'package:twisted_files/features/questions_screen/question_content.dart';
 import 'package:twisted_files/features/questions_screen/questions_cubit.dart';
 

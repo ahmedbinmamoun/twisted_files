@@ -10,7 +10,6 @@ class CaseResultEntity {
   final int totalScore;
   final int rank;
 
-  final String returnRoute; 
 
   CaseResultEntity({
     required this.caseNumber,
@@ -22,6 +21,5 @@ class CaseResultEntity {
     required this.suspectBonus,
     required this.totalScore,
     required this.rank,
-    required this.returnRoute,
   });
 }
