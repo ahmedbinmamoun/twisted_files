@@ -54,7 +54,6 @@ class ProfileStatBox extends StatelessWidget {
             ],
           ),
 
-          /// ➜ السهم
           Visibility(
             visible: isRank,
             child: Positioned(

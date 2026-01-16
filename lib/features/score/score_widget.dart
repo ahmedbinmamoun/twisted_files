@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:twisted_files/config/di/config_di.dart';
+import 'package:twisted_files/features/score/score_viewmodel.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:twisted_files/core/constants/app_assest.dart';
 import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
-import 'package:twisted_files/features/score/score_cubit/score_cubit.dart';
 
 class ScoreWidget extends StatelessWidget {
   const ScoreWidget({super.key});
@@ -21,10 +21,12 @@ class ScoreWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          BlocBuilder<ScoreCubit, ScoreState>(
-            builder: (context, scoreState) {
+          AnimatedBuilder(
+            animation: getIt<ScoreViewModel>(),
+            builder: (context, _) {
+              final total = getIt<ScoreViewModel>().score.totalScore;
               return Text(
-                'Score: ${scoreState.score.totalScore}',
+                'Score: $total',
                 style: AppStyles.mediumBody.copyWith(
                   color: AppColors.scenderyColor,
                 ),

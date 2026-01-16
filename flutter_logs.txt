@@ -1,0 +1,31 @@
+Showing M2101K6G logs:
+I/flutter (27535): ScoreViewModel.startCaseSession: caseId=9 previousCaseScore=0 savedTotal=100 sessionStartTotal=100 currentTotal=100
+I/flutter (27535): DEBUG: ChooseSuspect.onSelect start id=sus_01 isCorrect=true
+I/flutter (27535): DEBUG: calling solveSuspect
+I/flutter (27535): DEBUG: after solveSuspect
+I/flutter (27535): DEBUG: calling finalizeCase
+I/flutter (27535): ScoreViewModel.finalizeCase: caseId=9 sessionGain=100 newTotal=200 savedCaseScore=100
+I/flutter (27535): DEBUG: after finalizeCase
+I/flutter (27535): DEBUG: ready to show dialog, totalScore=200
+I/flutter (27535): DEBUG: in dialog builder
+I/flutter (27535): DEBUG: after showDialog
+I/flutter (27535): ScoreViewModel.startCaseSession: caseId=2 previousCaseScore=0 savedTotal=200 sessionStartTotal=200 currentTotal=200
+I/flutter (27535): DEBUG: ChooseSuspect.onSelect start id=sus_01 isCorrect=true
+I/flutter (27535): DEBUG: calling solveSuspect
+I/flutter (27535): DEBUG: after solveSuspect
+I/flutter (27535): DEBUG: calling finalizeCase
+I/flutter (27535): ScoreViewModel.finalizeCase: caseId=2 sessionGain=20 newTotal=220 savedCaseScore=20
+I/flutter (27535): DEBUG: after finalizeCase
+I/flutter (27535): DEBUG: ready to show dialog, totalScore=220
+I/flutter (27535): DEBUG: in dialog builder
+I/flutter (27535): DEBUG: after showDialog
+I/flutter (27535): ScoreViewModel.startCaseSession: caseId=10 previousCaseScore=-10 savedTotal=220 sessionStartTotal=230 currentTotal=230
+I/flutter (27535): DEBUG: ChooseSuspect.onSelect start id=sus_02 isCorrect=true
+I/flutter (27535): DEBUG: calling solveSuspect
+I/flutter (27535): DEBUG: after solveSuspect
+I/flutter (27535): DEBUG: calling finalizeCase
+I/flutter (27535): ScoreViewModel.finalizeCase: caseId=10 sessionGain=70 newTotal=300 savedCaseScore=70
+I/flutter (27535): DEBUG: after finalizeCase
+I/flutter (27535): DEBUG: ready to show dialog, totalScore=300
+I/flutter (27535): DEBUG: in dialog builder
+I/flutter (27535): DEBUG: after showDialog

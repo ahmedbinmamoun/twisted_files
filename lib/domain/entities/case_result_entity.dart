@@ -7,6 +7,7 @@ class CaseResultEntity {
   final int totalQuestions;
   final int questionPoints;
   final int suspectBonus;
+  final int penalty;
   final int totalScore;
   final int rank;
 
@@ -19,6 +20,7 @@ class CaseResultEntity {
     required this.totalQuestions,
     required this.questionPoints,
     required this.suspectBonus,
+  required this.penalty,
     required this.totalScore,
     required this.rank,
   });

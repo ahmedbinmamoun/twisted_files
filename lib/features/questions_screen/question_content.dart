@@ -7,7 +7,8 @@ import 'package:twisted_files/core/constants/app_style.dart';
 import 'package:twisted_files/domain/entities/case_entity.dart';
 import 'package:twisted_files/features/common/widgets/primary_button.dart';
 import 'package:twisted_files/features/questions_screen/questions_cubit.dart';
-import 'package:twisted_files/features/score/score_cubit/score_cubit.dart';
+import 'package:twisted_files/config/di/config_di.dart';
+import 'package:twisted_files/features/score/score_viewmodel.dart';
 import 'package:twisted_files/features/score/score_widget.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:twisted_files/features/common/animations/shake_animation.dart';
@@ -58,7 +59,7 @@ class _QuestionContentState extends State<QuestionContent> {
 
   @override
   Widget build(BuildContext context) {
-    final scoreCubit = context.read<ScoreCubit>();
+  final scoreVm = getIt<ScoreViewModel>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +104,7 @@ class _QuestionContentState extends State<QuestionContent> {
 
                     await _playSound(isCorrect);
 
-                    await scoreCubit.answerQuestion(widget.caseEntity, isCorrect);
+                    await scoreVm.answerQuestion(widget.caseEntity, isCorrect);
 
                     await Future.delayed(const Duration(milliseconds: 500));
 
