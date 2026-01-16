@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:twisted_files/config/di/config_di.dart';
+import 'package:twisted_files/features/score/score_viewmodel.dart';
 import 'package:twisted_files/domain/entities/case_entity.dart';
 import 'package:twisted_files/domain/entities/case_result_entity.dart';
 import 'package:twisted_files/domain/entities/suspect_entity.dart';
 import 'package:twisted_files/domain/repositories/case_repository.dart';
 import 'package:twisted_files/features/questions_screen/choose_suspect/choose_suspect_view.dart';
 import 'package:twisted_files/features/result_dialog/case_result_dialog.dart';
-import 'package:twisted_files/features/score/score_cubit/score_cubit.dart';
+// removed ScoreCubit usage; now using ScoreViewModel via DI
 
 class ChooseSuspect extends StatelessWidget {
   final List<SuspectEntity> suspects;
@@ -24,31 +25,35 @@ class ChooseSuspect extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (innerContext) {
-        final scoreCubit = innerContext.read<ScoreCubit>();
+        final scoreVm = getIt<ScoreViewModel>();
 
         return ChooseSuspectView(
           suspects: suspects,
           correctSuspectId: caseEntity.correctSuspectId,
           onSelect: (suspect) async {
-            final isCorrect =
-                suspect.id.trim() == (caseEntity.correctSuspectId ?? '').trim();
+            final correctId = caseEntity.correctSuspectId;
+            final isCorrect = suspect.id.trim() == correctId.trim();
             print(
               'DEBUG: ChooseSuspect.onSelect start id=${suspect.id} isCorrect=$isCorrect',
             );
 
             try {
               print('DEBUG: calling solveSuspect');
-              await scoreCubit.solveSuspect(caseEntity, isCorrect);
+              await scoreVm.solveSuspect(caseEntity);
               print('DEBUG: after solveSuspect');
 
+              // capture session stats before finalize (finalizeCase clears them)
+              final sessionSolved = scoreVm.sessionSolvedCount;
+              final sessionQuestionPoints = scoreVm.sessionQuestionGross;
+              final sessionPenalty = scoreVm.sessionPenalty;
+              final sessionSuspect = scoreVm.sessionSuspectGross;
+
               print('DEBUG: calling finalizeCase');
-              await scoreCubit.finalizeCase(caseEntity);
+              await scoreVm.finalizeCase(caseEntity);
               print('DEBUG: after finalizeCase');
 
-              final score = scoreCubit.state.score;
-              print(
-                'DEBUG: ready to show dialog, totalScore=${score.totalScore}',
-              );
+              final score = scoreVm.score; // final saved score
+              print('DEBUG: ready to show dialog, totalScore=${score.totalScore}');
 
               await showDialog(
                 context: innerContext,
@@ -60,10 +65,11 @@ class ChooseSuspect extends StatelessWidget {
                       caseNumber: caseEntity.caseNumber,
                       caseTitle: caseEntity.title,
                       isSuccess: isCorrect,
-                      solvedQuestions: score.questionPoints ~/ 10,
+                      solvedQuestions: sessionSolved,
                       totalQuestions: caseEntity.questions.length,
-                      questionPoints: score.questionPoints,
-                      suspectBonus: score.suspectPoints,
+                      questionPoints: sessionQuestionPoints,
+                      suspectBonus: sessionSuspect,
+                      penalty: sessionPenalty,
                       totalScore: score.totalScore,
                       rank: 869,
                     ),

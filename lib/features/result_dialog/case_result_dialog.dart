@@ -73,6 +73,10 @@ class CaseResultDialog extends StatelessWidget {
               label: 'Question Points',
               value: '${result.questionPoints}',
             ),
+            ResultRow(
+              label: 'Penalties',
+              value: '-${result.penalty}',
+            ),
             ResultRow(label: 'Suspect Bonus', value: '${result.suspectBonus}'),
             ResultRow(
               label: 'Total Score',

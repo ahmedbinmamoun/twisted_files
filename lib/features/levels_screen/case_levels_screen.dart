@@ -30,7 +30,6 @@ class CaseLevelsScreen extends StatelessWidget {
                   icon: AppAssests.oneStarIcon,
                   text: 'EASY CASES',
                   onPressed: () {
-                    // AppNavigator.push(context, CasesListScreen(repository: repository));
                     Navigator.pushNamed(
                       context,
                       AppRoutes.caesesListScreen,

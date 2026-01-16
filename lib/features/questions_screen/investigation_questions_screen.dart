@@ -5,9 +5,11 @@ import 'package:twisted_files/domain/entities/case_entity.dart';
 import 'package:twisted_files/domain/repositories/case_repository.dart';
 import 'package:twisted_files/domain/repositories/score_repository.dart';
 import 'package:twisted_files/domain/use_cases/update_score_use_case.dart';
+import 'package:twisted_files/config/di/config_di.dart';
+import 'package:twisted_files/features/score/score_viewmodel.dart';
 import 'package:twisted_files/features/questions_screen/questions_cubit.dart';
 import 'package:twisted_files/features/questions_screen/questions_view.dart';
-import 'package:twisted_files/features/score/score_cubit/score_cubit.dart';
+// migrated to ScoreViewModel via DI
 
 class InvestigationQuestionsScreen extends StatelessWidget {
   final CaseEntity caseEntity;
@@ -24,7 +26,7 @@ class InvestigationQuestionsScreen extends StatelessWidget {
   });
 
   Future<bool> _onWillPop(BuildContext context) async {
-    final scoreCubit = context.read<ScoreCubit>();
+  final scoreVm = getIt<ScoreViewModel>();
 
     final result = await showDialog<bool>(
       context: context,
@@ -42,7 +44,7 @@ class InvestigationQuestionsScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                await scoreCubit.resetCase(caseEntity);
+                await scoreVm.resetCase(caseEntity.id);
                 Navigator.of(dialogContext).pop(true);
               },
               child: const Text('Exit'),
@@ -58,16 +60,12 @@ class InvestigationQuestionsScreen extends StatelessWidget {
  
   @override
   Widget build(BuildContext context) {
+  // Ensure a case session is started whenever this screen appears.
+  // Fire-and-forget call; startCaseSession is idempotent for the same case.
+  getIt<ScoreViewModel>().startCaseSession(caseEntity.id);
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => QuestionsCubit()),
-        BlocProvider(
-          create: (_) => ScoreCubit(
-            activeCaseId: caseEntity.id,
-            repository: scoreRepository,
-            useCase: UpdateScoreUseCase(scoreRepository),
-          ),
-        ),
       ],
       child: Builder(
         builder: (innerContext) {

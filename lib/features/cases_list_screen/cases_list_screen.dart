@@ -6,12 +6,11 @@ import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
 import 'package:twisted_files/core/navigation/app_routes.dart';
 import 'package:twisted_files/domain/repositories/case_repository.dart';
-import 'package:twisted_files/domain/use_cases/can_open_case_use_case.dart';
-import 'package:twisted_files/features/cases_list_screen/cubit/cases_level_cubit.dart';
-import 'package:twisted_files/features/cases_list_screen/cubit/cases_list_state.dart'
-    hide CasesListCubit;
+import 'package:twisted_files/features/cases_list_screen/case_list_view_model.dart';
+import 'package:twisted_files/features/cases_list_screen/cubit/cases_list_state.dart';
 import 'package:twisted_files/features/common/widgets/primary_button.dart';
-import 'package:twisted_files/features/score/score_cubit/score_cubit.dart';
+import 'package:twisted_files/config/di/config_di.dart';
+import 'package:twisted_files/features/score/score_viewmodel.dart';
 
 class CasesListScreen extends StatelessWidget {
   final CaseRepository repository;
@@ -23,8 +22,10 @@ class CasesListScreen extends StatelessWidget {
     final difficulty = ModalRoute.of(context)!.settings.arguments as String;
 
     return BlocProvider(
-      create: (_) =>
-          CasesListCubit(repository)..loadCasesByDifficulty(difficulty),
+      create: (_) => CasesListViewModel(
+        repository: repository,
+        difficulty: difficulty,
+      )..loadCases(),
       child: Stack(
         children: [
           Image.asset(AppAssests.backgroundImage, fit: BoxFit.fill),
@@ -32,7 +33,7 @@ class CasesListScreen extends StatelessWidget {
             backgroundColor: AppColors.transparentColor,
             body: Padding(
               padding: EdgeInsets.symmetric(horizontal: 15.w),
-              child: BlocBuilder<CasesListCubit, CasesListState>(
+              child: BlocBuilder<CasesListViewModel, CasesListState>(
                 builder: (context, state) {
                   if (state is CasesListLoading) {
                     return const Center(child: CircularProgressIndicator());
@@ -40,6 +41,7 @@ class CasesListScreen extends StatelessWidget {
 
                   if (state is CasesListLoaded) {
                     final cases = state.cases;
+                    final totalScore = getIt<ScoreViewModel>().score.totalScore;
 
                     return ListView.separated(
                       itemCount: cases.length + 1,
@@ -58,15 +60,9 @@ class CasesListScreen extends StatelessWidget {
                         }
 
                         final caseItem = cases[index - 1];
-                        final totalScore = context
-                            .watch<ScoreCubit>()
-                            .state
-                            .score
-                            .totalScore;
-                        final canOpen = CanOpenCaseUseCase().call(
-                          totalScore: totalScore,
-                          caseEntity: caseItem,
-                        );
+                        final canOpen = context
+                            .read<CasesListViewModel>()
+                            .canOpenCase(totalScore, caseItem);
 
                         return PrimaryButton(
                           useWidget: true,
@@ -96,7 +92,6 @@ class CasesListScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-
                           onPressed: () {
                             if (canOpen) {
                               Navigator.pushNamed(
@@ -116,7 +111,6 @@ class CasesListScreen extends StatelessWidget {
                                 ),
                               );
                             }
-                            ;
                           },
                         );
                       },

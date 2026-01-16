@@ -70,9 +70,6 @@ class UpdateScoreUseCase {
       questionPoints: questionPoints,
       suspectPoints: suspectPoints,
     );
-
-    await repository.saveScore(updatedScore);
-
     return updatedScore;
   }
 }

@@ -52,6 +52,16 @@ Future<void> saveCaseProgress(CaseProgressEntity progress) async {
 
   return models.map(CaseProgressMapper.toEntity).toList();
 }
+
+  @override
+  Future<CaseProgressEntity?> getCaseProgress(String caseId) async{
+    final cases = await localDataSource.getAllCompletedCases();
+    try {
+      return cases.firstWhere((e) => e.caseId == caseId);
+    } catch (_) {
+      return null;
+    }
+  }
   
   
 }
