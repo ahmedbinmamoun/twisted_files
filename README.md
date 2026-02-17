@@ -68,7 +68,7 @@ Independent UI layer
 
 
 ## 🚀 Getting Started
-git clone https://github.com/yourusername/twisted-files.git
+git clone https://github.com/ahmedbinmamoun/twisted_files.git
 cd twisted-files
 flutter pub get
 flutter run
