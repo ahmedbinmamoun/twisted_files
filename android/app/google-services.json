@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "284978090387",
+    "project_id": "twisted-files-3d7e0",
+    "storage_bucket": "twisted-files-3d7e0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284978090387:android:ef10ed8248f6ec28e99866",
+        "android_client_info": {
+          "package_name": "com.example.twisted_files"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv04lxy-CVBVEH67W2LkYBvBn5czlIa_c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

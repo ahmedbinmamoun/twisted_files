@@ -36,7 +36,8 @@ class CaseOverviewViewModel extends Cubit<CaseOverviewState> {
   }
 
   Future<void> resetCase() async {
+    final progress = await scoreRepository.getCaseProgress(caseId);
     await scoreRepository.resetCase(caseId);
-    emit(state.copyWith(isCompleted: false, previousScore: 0));
+    emit(state.copyWith(isCompleted: false, previousScore: progress?.caseScore));
   }
 }
