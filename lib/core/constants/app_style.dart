@@ -47,5 +47,4 @@ class AppStyles {
     color: AppColors.redColor,
     letterSpacing: 2,
   );
-  
 }

@@ -4,13 +4,22 @@ import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
 
 class PrimaryButton extends StatelessWidget {
-   PrimaryButton({super.key,  this.text, required this.onPressed, this.backgroundColor, this.borderColor, this.useWidget = false , this.widget});
-   String? text;
-   VoidCallback? onPressed;
-   Color? backgroundColor;
-   Color? borderColor;
-   Widget? widget;
-   bool useWidget;
+  final String? text;
+  final VoidCallback? onPressed;
+  final Color? backgroundColor;
+  final Color? borderColor;
+  final Widget? widget;
+  final bool useWidget;
+
+  const PrimaryButton({
+    super.key,
+    this.text,
+    required this.onPressed,
+    this.backgroundColor,
+    this.borderColor,
+    this.useWidget = false,
+    this.widget,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,24 +28,26 @@ class PrimaryButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
         width: double.infinity,
-        // height: 80.h,
         decoration: BoxDecoration(
           color: backgroundColor ?? AppColors.primaryColor,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: borderColor ?? AppColors.primaryColor,
-            width: 3.w
-          )
-          
+            width: 3.w,
+          ),
         ),
         child: Center(
-             child: useWidget ? widget : Text(text!,
-             maxLines: null,
-             softWrap: true,
-             style: AppStyles.mediumButtonText.copyWith(
-              color: borderColor ?? AppColors.scenderyColor
-             ),textAlign: TextAlign.center,),
-         
+          child: useWidget
+              ? widget
+              : Text(
+                  text!,
+                  maxLines: null,
+                  softWrap: true,
+                  style: AppStyles.mediumButtonText.copyWith(
+                    color: borderColor ?? AppColors.scenderyColor,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
         ),
       ),
     );

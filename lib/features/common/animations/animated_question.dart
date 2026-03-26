@@ -4,11 +4,7 @@ class AnimatedQuestion extends StatelessWidget {
   final Widget child;
   final int index;
 
-  const AnimatedQuestion({
-    super.key,
-    required this.child,
-    required this.index,
-  });
+  const AnimatedQuestion({super.key, required this.child, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -21,16 +17,12 @@ class AnimatedQuestion extends StatelessWidget {
           begin: const Offset(0.05, 0),
           end: Offset.zero,
         ).animate(animation);
-
         return FadeTransition(
           opacity: animation,
           child: SlideTransition(position: slide, child: child),
         );
       },
-      child: KeyedSubtree(
-        key: ValueKey(index),
-        child: child,
-      ),
+      child: KeyedSubtree(key: ValueKey(index), child: child),
     );
   }
 }

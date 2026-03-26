@@ -13,7 +13,7 @@ class A4Header extends StatelessWidget {
     required this.caseNumber,
     required this.date,
     required this.location,
-    required this.title
+    required this.title,
   });
 
   @override
@@ -21,19 +21,11 @@ class A4Header extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "CASE FILE",
-          style: AppStyles.mediumTitle,
-        ),
-         SizedBox(height: 4.h),
-         Text("case: $title",
-         style: AppStyles.mediumBody,
-         ),
-         SizedBox(height: 2.h),
-        Text(
-          "No: $caseNumber | $date | $location",
-          style: AppStyles.mediumBody,
-        ),
+        Text("CASE FILE", style: AppStyles.mediumTitle),
+        SizedBox(height: 4.h),
+        Text("case: $title", style: AppStyles.mediumBody),
+        SizedBox(height: 2.h),
+        Text("No: $caseNumber | $date | $location", style: AppStyles.mediumBody),
       ],
     );
   }

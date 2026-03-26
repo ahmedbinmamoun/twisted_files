@@ -4,11 +4,16 @@ import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
 
 class PrimaryCard extends StatelessWidget {
-   PrimaryCard({super.key, required this.icon, required this.text,this.onPressed});
+  final VoidCallback? onPressed;
+  final String icon;
+  final String text;
 
-    VoidCallback? onPressed;
-    String icon;
-    String text;
+  const PrimaryCard({
+    super.key,
+    required this.icon,
+    required this.text,
+    this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +25,14 @@ class PrimaryCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.primaryColor,
           borderRadius: BorderRadius.circular(25),
-          
         ),
         child: Center(
           child: Column(
             children: [
-              SizedBox(height: 20.h,),
-              Image.asset(icon,
-              ),
-              SizedBox(height: 15.h,),
-              Text(text,style: AppStyles.largeButtonText,),
+              SizedBox(height: 20.h),
+              Image.asset(icon),
+              SizedBox(height: 15.h),
+              Text(text, style: AppStyles.largeButtonText),
             ],
           ),
         ),

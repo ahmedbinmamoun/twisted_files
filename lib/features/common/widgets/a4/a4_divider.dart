@@ -6,9 +6,6 @@ class A4Divider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Divider(
-      thickness: 1,
-      height: 32.h,
-    );
+    return Divider(thickness: 1, height: 32.h);
   }
 }
