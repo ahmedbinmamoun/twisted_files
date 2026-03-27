@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:twisted_files/core/constants/app_assets.dart';
@@ -15,43 +14,43 @@ class InvestigationQuestionsScreen extends StatelessWidget {
 
   Future<bool> _onWillPop(BuildContext context) async {
     final scoreVm = getIt<ScoreViewModel>();
-    bool shouldExit = false; 
+    bool shouldExit = false;
 
     await AppDialog.show(
       context,
-      imagePath: AppAssets.oldDetectiveIcon,
-      title: 'Exit Investigation',
-      summary:
-          'If you leave now, your progress and score for this case will be lost.\n\nDo you want to exit?',
-      barrierDismissible: false, 
+      imagePath:          AppAssets.oldDetectiveIcon,
+      title:              'Exit Investigation',
+      summary:            'If you leave now, your progress and score for this case will be lost.\n\nDo you want to exit?',
+      barrierDismissible: false,
       actions: [
         AppDialogAction(
-          label: 'Cancel',
+          label:     'Cancel',
           onPressed: () {
-            shouldExit = false; 
+            shouldExit = false;
             Navigator.of(context).pop();
           },
         ),
         AppDialogAction(
-          label: 'Exit',
+          label:     'Exit',
           isPrimary: true,
           onPressed: () async {
             await scoreVm.resetCase(caseEntity.id);
-            shouldExit = true; 
+            shouldExit = true;
             Navigator.of(context).pop();
           },
         ),
       ],
     );
 
-    return shouldExit; 
+    return shouldExit;
   }
 
   @override
   Widget build(BuildContext context) {
     getIt<ScoreViewModel>().startCaseSession(caseEntity.id);
+
     return BlocProvider(
-      create: (_) => QuestionsCubit(),
+      create: (_) => QuestionsCubit(totalQuestions: caseEntity.questions.length),
       child: Builder(
         builder: (ctx) => WillPopScope(
           onWillPop: () => _onWillPop(ctx),

@@ -8,6 +8,7 @@ import 'package:twisted_files/features/common/animations/animated_question.dart'
 import 'package:twisted_files/features/notes/presentation/notes_fab.dart';
 import 'package:twisted_files/features/questions_screen/presentation/choose_suspect/choose_suspect_widget.dart';
 import 'package:twisted_files/features/questions_screen/presentation/cubit/questions_cubit.dart';
+import 'package:twisted_files/features/questions_screen/presentation/cubit/questions_state.dart';
 import 'package:twisted_files/features/questions_screen/presentation/question_content_widget.dart';
 
 class QuestionsView extends StatelessWidget {
@@ -25,23 +26,31 @@ class QuestionsView extends StatelessWidget {
           body: SafeArea(
             child: Padding(
               padding: EdgeInsets.all(16.w),
-              child: BlocBuilder<QuestionsCubit, int>(
-                builder: (_, index) {
-                  if (index >= caseEntity.questions.length) {
+              child: BlocBuilder<QuestionsCubit, QuestionsState>(
+                builder: (_, state) {
+                  // ── انتهت الأسئلة — اختر المشتبه به ─────────────────────
+                  if (state is QuestionsFinished) {
                     return ChooseSuspectWidget(
-                      suspects: caseEntity.suspects,
+                      suspects:   caseEntity.suspects,
                       caseEntity: caseEntity,
                     );
                   }
-                  return AnimatedQuestion(
-                    index: index,
-                    child: QuestionContentWidget(
-                      questionIndex: index,
-                      total: caseEntity.questions.length,
-                      question: caseEntity.questions[index],
-                      caseEntity: caseEntity,
-                    ),
-                  );
+
+                  // ── أسئلة ─────────────────────────────────────────────────
+                  if (state is QuestionsAnswering) {
+                    final index = state.index;
+                    return AnimatedQuestion(
+                      index: index,
+                      child: QuestionContentWidget(
+                        questionIndex: index,
+                        total:         caseEntity.questions.length,
+                        question:      caseEntity.questions[index],
+                        caseEntity:    caseEntity,
+                      ),
+                    );
+                  }
+
+                  return const SizedBox.shrink();
                 },
               ),
             ),
