@@ -33,7 +33,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 PrimaryCard(
-                  icon: AppAssets.infoIcon,
+                  icon: AppAssets.rankIcon,
                   text: 'LEADERBOARD',
                   onPressed: () => AppNavigator.push(context, const RankScreen()),
                 ),

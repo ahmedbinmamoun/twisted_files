@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:twisted_files/features/cases_list_screen/domain/entities/case_entity.dart';
 import 'package:twisted_files/features/cases_list_screen/domain/entities/case_result_entity.dart';
 import 'package:twisted_files/features/cases_list_screen/domain/entities/suspect_entity.dart';
+import 'package:twisted_files/features/rank_screen/domain/use_cases/get_user_rank_use_case.dart';
 import 'package:twisted_files/features/score/presentation/score_view_model.dart';
 import 'choose_suspect_state.dart';
 
@@ -10,12 +11,15 @@ import 'choose_suspect_state.dart';
 class ChooseSuspectCubit extends Cubit<ChooseSuspectState> {
   final ScoreViewModel _scoreVm;
   final CaseEntity     _caseEntity;
+  final GetUserRankUseCase _getUserRank; 
 
   ChooseSuspectCubit({
     required ScoreViewModel scoreVm,
     required CaseEntity     caseEntity,
+    required GetUserRankUseCase getUserRank,
   })  : _scoreVm    = scoreVm,
         _caseEntity = caseEntity,
+        _getUserRank = getUserRank,
         super(const ChooseSuspectIdle());
 
   Future<void> selectSuspect(SuspectEntity suspect) async {
@@ -40,6 +44,8 @@ class ChooseSuspectCubit extends Cubit<ChooseSuspectState> {
       // احفظ النتيجة في Supabase
       await _scoreVm.finalizeCase(_caseEntity);
 
+      final rank = await _getUserRank();
+
       if (isClosed) return;
 
       emit(ChooseSuspectDone(
@@ -54,7 +60,7 @@ class ChooseSuspectCubit extends Cubit<ChooseSuspectState> {
           suspectBonus:    sessionSuspect,
           penalty:         sessionPenalty,
           totalScore:      _scoreVm.score.totalScore,
-          rank:            869,
+          rank:            rank,
         ),
       ));
     } catch (e, st) {

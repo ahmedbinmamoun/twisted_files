@@ -18,20 +18,20 @@ class InvestigationQuestionsScreen extends StatelessWidget {
 
     await AppDialog.show(
       context,
-      imagePath:          AppAssets.oldDetectiveIcon,
-      title:              'Exit Investigation',
-      summary:            'If you leave now, your progress and score for this case will be lost.\n\nDo you want to exit?',
+      title: 'Exit Investigation',
+      summary:
+          'If you leave now, your progress and score for this case will be lost.\n\nDo you want to exit?',
       barrierDismissible: false,
       actions: [
         AppDialogAction(
-          label:     'Cancel',
+          label: 'Cancel',
           onPressed: () {
             shouldExit = false;
             Navigator.of(context).pop();
           },
         ),
         AppDialogAction(
-          label:     'Exit',
+          label: 'Exit',
           isPrimary: true,
           onPressed: () async {
             await scoreVm.resetCase(caseEntity.id);
@@ -50,6 +50,7 @@ class InvestigationQuestionsScreen extends StatelessWidget {
     getIt<ScoreViewModel>().startCaseSession(caseEntity.id);
 
     return BlocProvider(
+      // ← أضف totalQuestions
       create: (_) => QuestionsCubit(totalQuestions: caseEntity.questions.length),
       child: Builder(
         builder: (ctx) => WillPopScope(

@@ -12,6 +12,7 @@ import 'package:twisted_files/features/cases_list_screen/presentation/cubit/case
 import 'package:twisted_files/features/cases_list_screen/presentation/cubit/cases_list_state.dart';
 import 'package:twisted_files/features/common/widgets/app_loading.dart';
 import 'package:twisted_files/features/common/widgets/primary_button.dart';
+import 'package:twisted_files/features/score/domain/repositories/score_repository.dart';
 import 'package:twisted_files/features/score/presentation/score_view_model.dart';
 
 class CasesListScreen extends StatelessWidget {
@@ -25,6 +26,7 @@ class CasesListScreen extends StatelessWidget {
       create: (_) => CasesListCubit(
         getCases: getIt<GetCasesByDifficultyUseCase>(),
         canOpenCase: getIt<CanOpenCaseUseCase>(),
+        scoreRepository: getIt<ScoreRepository>(),
       )..loadCases(difficulty),
       child: Stack(
         children: [
@@ -39,7 +41,7 @@ class CasesListScreen extends StatelessWidget {
                     return const AppLoading();
                   }
                   if (state is CasesListLoaded) {
-                    final cases      = state.cases;
+                    final cases = state.cases;
                     final totalScore = getIt<ScoreViewModel>().score.totalScore;
                     return ListView.separated(
                       itemCount: cases.length + 1,
@@ -56,8 +58,14 @@ class CasesListScreen extends StatelessWidget {
                             ),
                           );
                         }
-                        final item    = cases[i - 1];
-                        final canOpen = ctx.read<CasesListCubit>().canOpen(totalScore, item);
+                        final item = cases[i - 1];
+                        final canOpen = ctx.read<CasesListCubit>().canOpen(
+                          totalScore,
+                          item,
+                        );
+                        final isCompleted = state.completedCaseIds.contains(
+                          item.id,
+                        );
                         return PrimaryButton(
                           useWidget: true,
                           widget: Row(
@@ -74,7 +82,16 @@ class CasesListScreen extends StatelessWidget {
                               ),
                               if (!canOpen) ...[
                                 SizedBox(width: 5.w),
-                                Icon(Icons.lock, color: AppColors.scenderyColor),
+                                Icon(
+                                  Icons.lock,
+                                  color: AppColors.scenderyColor,
+                                ),
+                              ] else if (isCompleted) ...[
+                                SizedBox(width: 5.w),
+                                Icon(
+                                  Icons.check_rounded,
+                                  color: AppColors.scenderyColor,
+                                ), 
                               ],
                             ],
                           ),
@@ -83,14 +100,19 @@ class CasesListScreen extends StatelessWidget {
                               Navigator.pushNamed(
                                 ctx,
                                 AppRoutes.caseOverViewScreen,
-                                arguments: {'caseId': item.id, 'difficulty': difficulty},
+                                arguments: {
+                                  'caseId': item.id,
+                                  'difficulty': difficulty,
+                                },
                               );
                             } else {
-                              ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
-                                content: Text(
-                                  'You need ${item.unlockRole.requiredScore} points to unlock this case',
+                              ScaffoldMessenger.of(ctx).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'You need ${item.unlockRole.requiredScore} points to unlock this case',
+                                  ),
                                 ),
-                              ));
+                              );
                             }
                           },
                         );

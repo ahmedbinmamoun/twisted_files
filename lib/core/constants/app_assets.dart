@@ -12,13 +12,15 @@ class AppAssets {
   static const String oneStarIcon      = "assets/icons/star.png";
   static const String twoStarsIcon     = "assets/icons/two_stars.png";
   static const String threeStarsIcon   = "assets/icons/three_stars.png";
-  static const String googleIcon   = "assets/icons/google.avif";
+  static const String googleIcon       = "assets/icons/google.avif";
+  static const String rankIcon         = "assets/icons/rank.png";
 
   // images
   static const String splashImage           = "assets/images/splash.png";
   static const String backgroundImage       = "assets/images/background.png";
   static const String notesBackgroundImage  = "assets/images/note_background.png";
   static const String caseClosedSticker     = "assets/images/case_closed.png";
+  static const String boardImage            = "assets/images/board.jpeg";
 
   // lottie
   static const String detectiveWalkLottie = "assets/lottie/detective_walk.json";

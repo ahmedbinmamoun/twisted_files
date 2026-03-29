@@ -10,6 +10,7 @@ import 'package:twisted_files/features/auth/domain/use_cases/update_nickname_use
 import 'package:twisted_files/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:twisted_files/features/auth/presentation/cubit/auth_state.dart';
 import 'package:twisted_files/features/common/widgets/app_loading.dart';
+import 'package:twisted_files/features/common/widgets/primary_button.dart';
 import 'package:twisted_files/features/common/widgets/rewarded_ad.dart';
 import 'package:twisted_files/features/profile_screen/presentation/cubit/profile_cubit.dart';
 import 'package:twisted_files/features/profile_screen/presentation/cubit/profile_state.dart';
@@ -49,7 +50,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: BlocBuilder<ProfileCubit, ProfileState>(
                   builder: (_, profileState) {
                     if (profileState.isLoading) {
-                      return const AppLoading();
+                      return SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        child: const AppLoading());
                     }
                     return BlocConsumer<AuthCubit, AuthState>(
                       listener: (ctx, authState) {
@@ -207,78 +210,151 @@ class _ProfileScreenState extends State<ProfileScreen> {
 // ── Nickname Dialog (StatefulWidget for loading state) ───────────────────────
 class _NicknameDialog extends StatefulWidget {
   final TextEditingController controller;
-  final AuthCubit             authCubit;
+  final AuthCubit authCubit;
 
-  const _NicknameDialog({required this.controller, required this.authCubit});
+  const _NicknameDialog({
+    required this.controller,
+    required this.authCubit,
+  });
 
   @override
   State<_NicknameDialog> createState() => _NicknameDialogState();
 }
 
 class _NicknameDialogState extends State<_NicknameDialog> {
-  bool   _loading = false;
-  String _error   = '';
+  bool _loading = false;
+  String _error = '';
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Change Nickname'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: widget.controller,
-            maxLength:  20,
-            decoration: InputDecoration(
-              hintText:  'Enter new nickname',
-              errorText: _error.isEmpty ? null : _error,
-            ),
-          ),
-          if (_loading) ...[
-            SizedBox(height: 8.h),
-            const LinearProgressIndicator(),
-          ],
-        ],
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
       ),
-      actions: [
-        TextButton(
-          onPressed: _loading ? null : () => Navigator.pop(context),
-          child: const Text('Cancel'),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            /// Top indicator (nice touch)
+            Container(
+              width: 40.w,
+              height: 4.h,
+              decoration: BoxDecoration(
+                color: AppColors.greyColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            /// Title
+             Text(
+              'Edit Nickname',
+              style: AppStyles.largeTitle
+            ),
+
+            const SizedBox(height: 8),
+
+             Text(
+              'Choose a unique nickname',
+              style: AppStyles.largeBody.copyWith(color: AppColors.greyColor),
+            ),
+
+            const SizedBox(height: 20),
+
+            /// Input
+            TextField(
+              controller: widget.controller,
+              maxLength: 20,
+              decoration: InputDecoration(
+                hintText: 'Enter nickname...',
+                filled: true,
+                fillColor: AppColors.offWhiteColor,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide.none,
+                ),
+                errorText: _error.isEmpty ? null : _error,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            /// Loading
+            if (_loading)
+              const LinearProgressIndicator(),
+
+            const SizedBox(height: 20),
+
+            /// Buttons
+            Row(
+  children: [
+    /// Cancel
+    Expanded(
+      child: PrimaryButton(
+        text: 'Cancel',
+        onPressed: _loading ? null : () => Navigator.pop(context),
+        backgroundColor: Colors.transparent,
+        borderColor: Colors.grey,
+      ),
+    ),
+
+    SizedBox(width: 10.w),
+
+    /// Save
+    Expanded(
+      child: PrimaryButton(
+        onPressed: _loading ? null : () => _save(context),
+        useWidget: _loading,
+        text: _loading ? null : 'Save',
+        widget: const SizedBox(
+          height: 18,
+          width: 18,
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            color: Colors.white,
+          ),
         ),
-        TextButton(
-          onPressed: _loading ? null : () => _save(context),
-          child: const Text('Save'),
+      ),
+    ),
+  ],
+)
+          
+          ],
         ),
-      ],
+      ),
     );
   }
 
   Future<void> _save(BuildContext context) async {
     final name = widget.controller.text.trim();
 
-    // ── Client-side validation ──
     if (name.length < 3) {
       setState(() => _error = 'Minimum 3 characters');
       return;
     }
 
-    setState(() { _loading = true; _error = ''; });
+    setState(() {
+      _loading = true;
+      _error = '';
+    });
 
-    // ── Use case handles uniqueness check + save ──
     final result = await getIt<UpdateNicknameUseCase>().call(name);
 
     if (result == NicknameUpdateResult.success) {
       showRewardedAd();
     }
-    
-
-
 
     if (!mounted) return;
 
     switch (result) {
       case NicknameUpdateResult.success:
-        // Update AuthCubit state so UI reflects new name instantly
         widget.authCubit.updateNickname(name);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -287,11 +363,17 @@ class _NicknameDialogState extends State<_NicknameDialog> {
         break;
 
       case NicknameUpdateResult.taken:
-        setState(() { _loading = false; _error = 'Name already taken, try another'; });
+        setState(() {
+          _loading = false;
+          _error = 'Name already taken';
+        });
         break;
 
       case NicknameUpdateResult.tooShort:
-        setState(() { _loading = false; _error = 'Minimum 3 characters'; });
+        setState(() {
+          _loading = false;
+          _error = 'Minimum 3 characters';
+        });
         break;
 
       case NicknameUpdateResult.unchanged:

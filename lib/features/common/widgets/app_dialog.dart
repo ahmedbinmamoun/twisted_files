@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:twisted_files/core/constants/app_assets.dart';
 import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
 
@@ -42,7 +43,7 @@ class AppDialog extends StatelessWidget {
 
   const AppDialog({
     super.key,
-    required this.imagePath,
+    this.imagePath = AppAssets.boardImage,
     required this.title,
     required this.actions,
     this.summary,
@@ -54,7 +55,7 @@ class AppDialog extends StatelessWidget {
   /// Static helper — اعرض الـ dialog من أي مكان
   static Future<void> show(
     BuildContext context, {
-    required String imagePath,
+     String imagePath = AppAssets.boardImage,
     required String title,
     String? summary,
     bool isNetworkImage = false,

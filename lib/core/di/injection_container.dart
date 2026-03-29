@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:twisted_files/core/services/rewarded_ad_service.dart';
 
 // Core
 import 'package:twisted_files/core/services/supabase_service.dart';
@@ -96,6 +97,9 @@ Future<void> configureDependencies() async {
   getIt.registerLazySingleton<ScoreViewModel>(
     () => ScoreViewModel(getIt<UpdateScoreUseCase>(), getIt<ScoreRepository>()),
   );
+
+  //ads
+  getIt.registerLazySingleton(() => RewardedAdService()..loadAd());
 
   // Rank Feature
   getIt.registerLazySingleton(() => RankRemoteDataSource(client: getIt()));

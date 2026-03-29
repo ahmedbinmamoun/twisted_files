@@ -126,7 +126,6 @@ class CaseOverviewScreen extends StatelessWidget {
 
                                 AppDialog.show(
                                   ctx, 
-                                  imagePath: AppAssets.caseClosedSticker,
                                   title: 'Re-Investigation',
                                   summary: 'This will reset your score.',
                                   barrierDismissible: false,
