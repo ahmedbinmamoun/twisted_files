@@ -137,6 +137,7 @@ Future<void> configureDependencies() async {
       scoreRepository: getIt<ScoreRepository>(),
       getStats: getIt<GetProfileStatsUseCase>(),
       getUserRank: getIt<GetUserRankUseCase>(),
+      updateNickname:  getIt<UpdateNicknameUseCase>(),
     ),
   );
 }

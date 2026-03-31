@@ -6,6 +6,7 @@ import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/di/injection_container.dart';
 import 'package:twisted_files/core/navigation/app_routes.dart';
 import 'package:twisted_files/core/services/supabase_service.dart';
+import 'package:twisted_files/features/auth/domain/use_cases/update_nickname_use_case.dart';
 import 'package:twisted_files/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:twisted_files/features/auth/presentation/cubit/auth_state.dart';
 import 'package:twisted_files/features/case_overview_screen/presentation/case_overview_screen.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
                 scoreRepository: getIt<ScoreRepository>(),
                 getStats: getIt<GetProfileStatsUseCase>(), 
                 getUserRank: getIt<GetUserRankUseCase>(),
+                updateNickname:  getIt<UpdateNicknameUseCase>(),
               ),
             ),
           ],

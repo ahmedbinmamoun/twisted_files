@@ -47,4 +47,9 @@ class AppStyles {
     color: AppColors.redColor,
     letterSpacing: 2,
   );
+  static TextStyle smallBody = GoogleFonts.cairo(
+  fontSize: 11.sp,
+  fontWeight: FontWeight.w400,
+  color: AppColors.lightBlack,
+);
 }
