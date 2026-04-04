@@ -9,7 +9,10 @@ class AuthRemoteDataSource {
 
   AuthRemoteDataSource({SupabaseClient? client, GoogleSignIn? googleSignIn})
       : _client      = client      ?? SupabaseService.client,
-        _googleSignIn = googleSignIn ?? GoogleSignIn(scopes: ['email', 'profile']);
+        _googleSignIn = googleSignIn ?? GoogleSignIn(
+          serverClientId: '546763341689-vbvttc7976o7b5jpuc5ivko61mc5j7ls.apps.googleusercontent.com',
+          scopes: ['email', 'profile'],
+        );
 
   // ─── Helpers ─────────────────────────────────────────────────────────────
 

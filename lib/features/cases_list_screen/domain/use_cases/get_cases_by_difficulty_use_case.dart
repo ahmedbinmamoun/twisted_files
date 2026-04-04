@@ -5,6 +5,13 @@ class GetCasesByDifficultyUseCase {
   final CaseRepository _repository;
   const GetCasesByDifficultyUseCase(this._repository);
 
-  Future<List<CaseEntity>> call(String difficulty) =>
-      _repository.getCasesByDifficulty(difficulty);
+  Future<List<CaseEntity>> call(
+    String difficulty, {
+    int page     = 0,
+    int pageSize = 6,
+  }) => _repository.getCasesByDifficulty(
+    difficulty,
+    page:     page,
+    pageSize: pageSize,
+  );
 }

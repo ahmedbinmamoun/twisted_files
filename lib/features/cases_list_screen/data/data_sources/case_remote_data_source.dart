@@ -1,38 +1,117 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:twisted_files/core/services/supabase_service.dart';
 import 'package:twisted_files/features/cases_list_screen/data/models/case_model.dart';
+ 
 
 class CaseRemoteDataSource {
   final SupabaseClient _client;
-
+ 
   CaseRemoteDataSource({SupabaseClient? client})
       : _client = client ?? SupabaseService.client;
-
-  // ✅ يستخدم عمود id الأصلي في الجدول (مش JSON filter)
+ 
+  // ── In-memory cache ───────────────────────────────────────────────────────
+  final Map<String, CaseModel>       _caseCache       = {};
+  final Map<String, List<CaseModel>> _difficultyCache = {};
+ 
+  // ── Public API ────────────────────────────────────────────────────────────
+ 
   Future<CaseModel> loadCase(String caseId) async {
+    if (_caseCache.containsKey(caseId)) {
+      if (kDebugMode) print('📦 cache hit: case $caseId');
+      return _caseCache[caseId]!;
+    }
+ 
+    if (kDebugMode) print('🌐 fetching case $caseId from Supabase');
     final res = await _client
         .from('cases')
         .select('data')
         .eq('id', caseId)
         .single();
-    return CaseModel.fromJson(Map<String, dynamic>.from(res['data'] as Map));
+ 
+    final model = CaseModel.fromJson(
+      Map<String, dynamic>.from(res['data'] as Map),
+    );
+ 
+    _caseCache[caseId] = model; 
+    return model;
   }
+ 
+  // Future<List<CaseModel>> loadCasesByDifficulty(String difficulty) async {
+  //   if (_difficultyCache.containsKey(difficulty)) {
+  //     if (kDebugMode) print('📦 cache hit: difficulty=$difficulty');
+  //     return _difficultyCache[difficulty]!;
+  //   }
+ 
+  //   if (kDebugMode) print('🌐 fetching cases difficulty=$difficulty from Supabase');
+  //   final res = await _client
+  //       .from('cases')
+  //       .select('data')
+  //       .filter('data->>difficulty', 'eq', difficulty);
+ 
+  //   final models = (res as List)
+  //       .map((e) => CaseModel.fromJson(
+  //             Map<String, dynamic>.from(e['data'] as Map),
+  //           ))
+  //       .toList();
+ 
+  //   _difficultyCache[difficulty] = models; 
+ 
+  //   // أضف كل قضية في الـ case cache كمان عشان loadCase تستفيد
+  //   for (final m in models) {
+  //     _caseCache[m.id] = m;
+  //   }
+ 
+  //   return models;
+  // }
 
-  // ✅ يفلتر من داخل الـ JSON لأن عمود difficulty في الجدول = null
-  Future<List<CaseModel>> loadCasesByDifficulty(String difficulty) async {
-    final res = await _client
-        .from('cases')
-        .select('data')
-        .filter('data->>difficulty', 'eq', difficulty);
-    return (res as List)
-        .map((e) => CaseModel.fromJson(Map<String, dynamic>.from(e['data'] as Map)))
-        .toList();
-  }
+  Future<List<CaseModel>> loadCasesByDifficulty(
+  String difficulty, {
+  int page     = 0,
+  int pageSize = 6,
+}) async {
+  final from = page * pageSize;
+  final to   = from + pageSize - 1;
 
-  Future<List<CaseModel>> loadAllCases() async {
-    final res = await _client.from('cases').select('data');
-    return (res as List)
-        .map((e) => CaseModel.fromJson(Map<String, dynamic>.from(e['data'] as Map)))
-        .toList();
-  }
+  final res = await _client
+      .from('cases')
+      .select('data')
+      .filter('data->>difficulty', 'eq', difficulty)
+      .range(from, to); // ← Supabase pagination
+
+  return (res as List)
+      .map((e) => CaseModel.fromJson(Map<String, dynamic>.from(e['data'] as Map)))
+      .toList();
 }
+ 
+  /// يجيب كل القضايا — من الـ cache لو اتحملوا كلهم قبل كده
+  Future<List<CaseModel>> loadAllCases() async {
+    if (kDebugMode) print('🌐 fetching all cases from Supabase');
+    final res = await _client.from('cases').select('data');
+ 
+    final models = (res as List)
+        .map((e) => CaseModel.fromJson(
+              Map<String, dynamic>.from(e['data'] as Map),
+            ))
+        .toList();
+ 
+    // حدّث الـ caches
+    for (final m in models) {
+      _caseCache[m.id] = m;
+    }
+ 
+    return models;
+  }
+ 
+  /// امسح الـ cache — استدعيها لو المستخدم عمل pull-to-refresh
+  void clearCache() {
+    _caseCache.clear();
+    _difficultyCache.clear();
+    if (kDebugMode) print('🗑️ case cache cleared');
+  }
+ 
+  // ── Cache stats (للـ debug فقط) ──────────────────────────────────────────
+  int get cachedCasesCount      => _caseCache.length;
+  int get cachedDifficultiesCount => _difficultyCache.length;
+}
+ 

@@ -19,7 +19,16 @@ class QuestionsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image.asset(AppAssets.backgroundImage, fit: BoxFit.fill),
+        RepaintBoundary(
+          child: LayoutBuilder(
+            builder: (context, constraints) => Image.asset(
+              AppAssets.backgroundImage,
+              fit: BoxFit.fill,
+              cacheWidth: constraints.maxWidth.toInt(),
+              cacheHeight: constraints.maxHeight.toInt(),
+            ),
+          ),
+        ),
         Scaffold(
           backgroundColor: AppColors.transparentColor,
           floatingActionButton: NotesFab(caseId: caseEntity.id),

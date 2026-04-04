@@ -16,6 +16,16 @@ class CaseRepositorySupabaseImpl implements CaseRepository {
       (await _remote.loadAllCases()).map((m) => m.toEntity()).toList();
 
   @override
-  Future<List<CaseEntity>> getCasesByDifficulty(String difficulty) async =>
-      (await _remote.loadCasesByDifficulty(difficulty)).map((m) => m.toEntity()).toList();
+Future<List<CaseEntity>> getCasesByDifficulty(
+  String difficulty, {
+  int page     = 0,
+  int pageSize = 6,
+}) async =>
+    (await _remote.loadCasesByDifficulty(
+      difficulty,
+      page:     page,
+      pageSize: pageSize,
+    ))
+        .map((m) => m.toEntity())
+        .toList();
 }

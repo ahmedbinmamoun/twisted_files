@@ -143,7 +143,7 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
                 onTap:     _onHintTap,
               ),
             const Spacer(),
-            const ScoreWidget(),
+            RepaintBoundary(child: const ScoreWidget()),
           ],
         ),
 

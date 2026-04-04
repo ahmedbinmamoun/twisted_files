@@ -16,7 +16,16 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image.asset(AppAssets.backgroundImage, fit: BoxFit.fill),
+        RepaintBoundary(
+          child: LayoutBuilder(
+            builder: (context, constraints) => Image.asset(
+              AppAssets.backgroundImage,
+              fit: BoxFit.fill,
+              cacheWidth: constraints.maxWidth.toInt(),
+              cacheHeight: constraints.maxHeight.toInt(),
+            ),
+          ),
+        ),
         Scaffold(
           backgroundColor: AppColors.transparentColor,
           body: Padding(
@@ -29,19 +38,22 @@ class HomeScreen extends StatelessWidget {
                 PrimaryCard(
                   icon: AppAssets.folderIcon,
                   text: 'CASES FILES',
-                  onPressed: () => AppNavigator.push(context, const CaseLevelsScreen()),
+                  onPressed: () =>
+                      AppNavigator.push(context, const CaseLevelsScreen()),
                 ),
                 SizedBox(height: 20.h),
                 PrimaryCard(
                   icon: AppAssets.rankIcon,
                   text: 'LEADERBOARD',
-                  onPressed: () => AppNavigator.push(context, const RankScreen()),
+                  onPressed: () =>
+                      AppNavigator.push(context, const RankScreen()),
                 ),
                 SizedBox(height: 20.h),
                 PrimaryCard(
                   icon: AppAssets.oldDetectiveIcon,
                   text: 'PROFILE',
-                  onPressed: () => AppNavigator.push(context, const ProfileScreen()),
+                  onPressed: () =>
+                      AppNavigator.push(context, const ProfileScreen()),
                 ),
               ],
             ),

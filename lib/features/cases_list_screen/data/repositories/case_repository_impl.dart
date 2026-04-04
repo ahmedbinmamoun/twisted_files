@@ -19,11 +19,21 @@ class CaseRepositoryImpl implements CaseRepository {
   }
 
   @override
-  Future<List<CaseEntity>> getCasesByDifficulty(String difficulty) async {
-    final models = await _dataSource.loadAllCases();
-    return models
-        .where((m) => m.difficulty == difficulty)
-        .map((m) => m.toEntity())
-        .toList();
-  }
+Future<List<CaseEntity>> getCasesByDifficulty(
+  String difficulty, {
+  int page     = 0,
+  int pageSize = 6,
+}) async {
+  final models = await _dataSource.loadAllCases();
+  final filtered = models
+      .where((m) => m.difficulty == difficulty)
+      .toList();
+
+  // pagination يدوي على الـ local list
+  final from = page * pageSize;
+  if (from >= filtered.length) return [];
+  final to = (from + pageSize).clamp(0, filtered.length);
+
+  return filtered.sublist(from, to).map((m) => m.toEntity()).toList();
+}
 }

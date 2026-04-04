@@ -98,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(height: 32.h),
 
                         // ── Detective card ─────────────────────────────────
-                        DetectiveCard(stats: profileState.stats),
+                        RepaintBoundary(child: DetectiveCard(stats: profileState.stats)),
                         SizedBox(height: 32.h),
 
                         // ── Google Sign-in (guests only) ───────────────────

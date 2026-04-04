@@ -13,7 +13,16 @@ class CaseLevelsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image.asset(AppAssets.backgroundImage, fit: BoxFit.fill),
+        RepaintBoundary(
+          child: LayoutBuilder(
+            builder: (context, constraints) => Image.asset(
+              AppAssets.backgroundImage,
+              fit: BoxFit.fill,
+              cacheWidth: constraints.maxWidth.toInt(),
+              cacheHeight: constraints.maxHeight.toInt(),
+            ),
+          ),
+        ),
         Scaffold(
           backgroundColor: AppColors.transparentColor,
           body: Padding(
@@ -26,19 +35,31 @@ class CaseLevelsScreen extends StatelessWidget {
                 PrimaryCard(
                   icon: AppAssets.oneStarIcon,
                   text: 'EASY CASES',
-                  onPressed: () => Navigator.pushNamed(context, AppRoutes.casesListScreen, arguments: 'easy'),
+                  onPressed: () => Navigator.pushNamed(
+                    context,
+                    AppRoutes.casesListScreen,
+                    arguments: 'easy',
+                  ),
                 ),
                 SizedBox(height: 20.h),
                 PrimaryCard(
                   icon: AppAssets.twoStarsIcon,
                   text: 'MEDIUM CASES',
-                  onPressed: () => Navigator.pushNamed(context, AppRoutes.casesListScreen, arguments: 'medium'),
+                  onPressed: () => Navigator.pushNamed(
+                    context,
+                    AppRoutes.casesListScreen,
+                    arguments: 'medium',
+                  ),
                 ),
                 SizedBox(height: 20.h),
                 PrimaryCard(
                   icon: AppAssets.threeStarsIcon,
                   text: 'HARD CASES',
-                  onPressed: () => Navigator.pushNamed(context, AppRoutes.casesListScreen, arguments: 'hard'),
+                  onPressed: () => Navigator.pushNamed(
+                    context,
+                    AppRoutes.casesListScreen,
+                    arguments: 'hard',
+                  ),
                 ),
               ],
             ),

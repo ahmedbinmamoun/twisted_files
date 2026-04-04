@@ -22,21 +22,32 @@ class EvidenceListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => EvidenceListCubit(
-        repository: getIt<CaseRepository>(),
-        caseId: caseId,
-      )..loadCase(),
+      create: (_) =>
+          EvidenceListCubit(repository: getIt<CaseRepository>(), caseId: caseId)
+            ..loadCase(),
       child: BlocBuilder<EvidenceListCubit, EvidenceListState>(
         builder: (ctx, state) {
-          if (state is EvidenceListLoading) return const Scaffold(body: AppLoading());
-          if (state is EvidenceListError)  return Center(child: Text(state.message));
+          if (state is EvidenceListLoading)
+            return const Scaffold(body: AppLoading());
+          if (state is EvidenceListError)
+            return Center(child: Text(state.message));
           if (state is EvidenceListLoaded) {
-            final evidences  = state.caseEntity.evidences;
-            final suspects   = state.caseEntity.suspects;
+            final evidences = state.caseEntity.evidences;
+            final suspects = state.caseEntity.suspects;
             final totalItems = 1 + evidences.length + suspects.length + 1;
             return Stack(
               children: [
-                Image.asset(AppAssets.backgroundImage, fit: BoxFit.fill, width: double.infinity, height: double.infinity),
+                RepaintBoundary(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) => Image.asset(
+                      AppAssets.backgroundImage,
+                      fit: BoxFit.fill,
+                      cacheWidth: constraints.maxWidth.toInt(),
+                      cacheHeight: constraints.maxHeight.toInt(),
+                    ),
+                  ),
+                ),
+                // Image.asset(AppAssets.backgroundImage, fit: BoxFit.fill, width: double.infinity, height: double.infinity),
                 Scaffold(
                   backgroundColor: Colors.transparent,
                   body: Padding(
@@ -48,7 +59,9 @@ class EvidenceListScreen extends StatelessWidget {
                         if (i == 0) {
                           return Padding(
                             padding: EdgeInsets.only(bottom: 30.h, top: 80.h),
-                            child: Center(child: Text('EVIDENCE', style: AppStyles.logo)),
+                            child: Center(
+                              child: Text('EVIDENCE', style: AppStyles.logo),
+                            ),
                           );
                         }
                         if (i == totalItems - 1) {
@@ -57,12 +70,21 @@ class EvidenceListScreen extends StatelessWidget {
                             child: PrimaryButton(
                               text: 'START INVESTIGATION',
                               onPressed: () {
-                                getIt<ScoreViewModel>().startCaseSession(state.caseEntity.id).catchError((e) {
-                                  if (kDebugMode) print('startCaseSession error: $e');
-                                });
-                                Navigator.push(ctx2, MaterialPageRoute(
-                                  builder: (_) => InvestigationQuestionsScreen(caseEntity: state.caseEntity),
-                                ));
+                                getIt<ScoreViewModel>()
+                                    .startCaseSession(state.caseEntity.id)
+                                    .catchError((e) {
+                                      if (kDebugMode)
+                                        print('startCaseSession error: $e');
+                                    });
+                                Navigator.push(
+                                  ctx2,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        InvestigationQuestionsScreen(
+                                          caseEntity: state.caseEntity,
+                                        ),
+                                  ),
+                                );
                               },
                             ),
                           );
@@ -72,13 +94,16 @@ class EvidenceListScreen extends StatelessWidget {
                           final evidence = evidences[ci];
                           return PrimaryButton(
                             text: evidence.title,
-                            onPressed: () => Navigator.push(ctx2, MaterialPageRoute(
-                              builder: (_) => EvidenceDetailsScreen(
-                                caseEntity: state.caseEntity,
-                                isSuspect: false,
-                                item: evidence,
+                            onPressed: () => Navigator.push(
+                              ctx2,
+                              MaterialPageRoute(
+                                builder: (_) => EvidenceDetailsScreen(
+                                  caseEntity: state.caseEntity,
+                                  isSuspect: false,
+                                  item: evidence,
+                                ),
                               ),
-                            )),
+                            ),
                           );
                         } else {
                           final suspect = suspects[ci - evidences.length];
@@ -86,13 +111,16 @@ class EvidenceListScreen extends StatelessWidget {
                             backgroundColor: AppColors.scenderyColor,
                             borderColor: AppColors.primaryColor,
                             text: suspect.name,
-                            onPressed: () => Navigator.push(ctx2, MaterialPageRoute(
-                              builder: (_) => EvidenceDetailsScreen(
-                                caseEntity: state.caseEntity,
-                                isSuspect: true,
-                                item: suspect,
+                            onPressed: () => Navigator.push(
+                              ctx2,
+                              MaterialPageRoute(
+                                builder: (_) => EvidenceDetailsScreen(
+                                  caseEntity: state.caseEntity,
+                                  isSuspect: true,
+                                  item: suspect,
+                                ),
                               ),
-                            )),
+                            ),
                           );
                         }
                       },
