@@ -65,11 +65,20 @@ class CaseRemoteDataSource {
   //   return models;
   // }
 
-  Future<List<CaseModel>> loadCasesByDifficulty(
+  // غيّر الـ cache key يشمل الـ page
+Future<List<CaseModel>> loadCasesByDifficulty(
   String difficulty, {
   int page     = 0,
-  int pageSize = 6,
+  int pageSize = 10,
 }) async {
+  final cacheKey = '${difficulty}_$page';
+
+  if (_difficultyCache.containsKey(cacheKey)) {
+    if (kDebugMode) print('📦 cache hit: $cacheKey');
+    return _difficultyCache[cacheKey]!;
+  }
+
+  if (kDebugMode) print('🌐 fetching $cacheKey from Supabase');
   final from = page * pageSize;
   final to   = from + pageSize - 1;
 
@@ -77,13 +86,22 @@ class CaseRemoteDataSource {
       .from('cases')
       .select('data')
       .filter('data->>difficulty', 'eq', difficulty)
-      .range(from, to); // ← Supabase pagination
+      .range(from, to);
 
-  return (res as List)
-      .map((e) => CaseModel.fromJson(Map<String, dynamic>.from(e['data'] as Map)))
+  final models = (res as List)
+      .map((e) => CaseModel.fromJson(
+            Map<String, dynamic>.from(e['data'] as Map),
+          ))
       .toList();
+
+  _difficultyCache[cacheKey] = models; 
+
+  for (final m in models) {
+    _caseCache[m.id] = m;
+  }
+
+  return models;
 }
- 
   /// يجيب كل القضايا — من الـ cache لو اتحملوا كلهم قبل كده
   Future<List<CaseModel>> loadAllCases() async {
     if (kDebugMode) print('🌐 fetching all cases from Supabase');

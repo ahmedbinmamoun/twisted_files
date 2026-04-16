@@ -102,15 +102,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(height: 32.h),
 
                         // ── Google Sign-in (guests only) ───────────────────
-                        if (isAnon)
-                          GoogleSignInButton(
-                            isLoading: authState is AuthLoading,
-                            onPressed: authState is AuthLoading
-                                ? null
-                                : () => authCtx
-                                    .read<AuthCubit>()
-                                    .signInWithGoogle(),
-                          ),
+                        // if (isAnon)
+                        //   GoogleSignInButton(
+                        //     isLoading: authState is AuthLoading,
+                        //     onPressed: authState is AuthLoading
+                        //         ? null
+                        //         : () => authCtx
+                        //             .read<AuthCubit>()
+                        //             .signInWithGoogle(),
+                        //   ),
                       ],
                     );
                   },

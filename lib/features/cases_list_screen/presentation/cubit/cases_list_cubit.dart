@@ -29,35 +29,43 @@ class CasesListCubit extends Cubit<CasesListState> {
   // ── First load ────────────────────────────────────────────────────────────
  
   Future<void> loadCases(String difficulty) async {
-    _difficulty  = difficulty;
-    _currentPage = 0;
-    _isFetching  = false;
- 
-    emit(CasesListLoading());
- 
-    try {
-      final results = await Future.wait([
-        _getCases(difficulty, page: 0, pageSize: _pageSize),
-        _scoreRepository.getAllCompletedCases(),
-      ]);
- 
-      final cases     = results[0] as List<CaseEntity>;
-      final completed = results[1] as dynamic;
- 
-      final completedIds = <String>{
-        for (final c in completed) c.caseId as String,
-      };
- 
-      emit(CasesListLoaded(
-        cases,
-        completedCaseIds: completedIds,
-        hasMore:          cases.length == _pageSize, // لو جاء أقل يبقى خلصوا
-      ));
-    } catch (e) {
-      emit(CasesListError(e.toString()));
-    }
+  _difficulty  = difficulty;
+  _currentPage = 0;
+  _isFetching  = false;
+
+  emit(CasesListLoading());
+
+  try {
+    final results = await Future.wait([
+      _getCases(difficulty, page: 0, pageSize: _pageSize),
+      _scoreRepository.getAllCompletedCases(),
+    ]);
+
+    final cases      = results[0] as List<CaseEntity>;
+    final completed  = results[1] as dynamic;
+    final completedIds = <String>{
+      for (final c in completed) c.caseId as String,
+    };
+
+    emit(CasesListLoaded(
+      cases,
+      completedCaseIds: completedIds,
+      hasMore:          cases.length == _pageSize,
+    ));
+  } catch (e) {
+    // ← افرق بين no internet وغيره
+    final isNoInternet = e.toString().toLowerCase().contains('socket') ||
+        e.toString().toLowerCase().contains('network') ||
+        e.toString().toLowerCase().contains('connection') ||
+        e.toString().toLowerCase().contains('host');
+
+    emit(CasesListError(
+      isNoInternet
+          ? 'no_internet'
+          : e.toString(),
+    ));
   }
- 
+}
   // ── Load next page ────────────────────────────────────────────────────────
  
   Future<void> loadMore() async {
