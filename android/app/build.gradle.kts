@@ -21,7 +21,7 @@ plugins {
 
 
 android {
-    namespace = "com.example.twisted_files"
+    namespace = "com.bimo.twisted_files"
     compileSdk = 36
     ndkVersion = "27.0.12077973"
 
@@ -56,8 +56,8 @@ android {
     buildTypes {
         release {
             signingConfig   = signingConfigs.getByName("release")
-            isMinifyEnabled = false
-            isShrinkResources = false
+            isMinifyEnabled = true
+            isShrinkResources = true
         }
     }
 }

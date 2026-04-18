@@ -11,7 +11,7 @@ class CasesListCubit extends Cubit<CasesListState> {
   final ScoreRepository             _scoreRepository;
  
   // ── Pagination config ─────────────────────────────────────────────────────
-  static const int _pageSize = 6; // عدد القضايا في كل صفحة
+  static const int _pageSize = 15; // عدد القضايا في كل صفحة
  
   String          _difficulty = '';
   int             _currentPage = 0;
@@ -68,34 +68,34 @@ class CasesListCubit extends Cubit<CasesListState> {
 }
   // ── Load next page ────────────────────────────────────────────────────────
  
-  Future<void> loadMore() async {
+   Future<void> loadMore() async {
     final current = state;
     if (current is! CasesListLoaded) return;
-    if (!current.hasMore)     return; // مفيش صفحات تانية
-    if (_isFetching)          return; // بيجيب بالفعل
- 
+    if (!current.hasMore) return;
+    if (_isFetching) return;
+
     _isFetching = true;
     emit(current.copyWith(isLoadingMore: true));
- 
+
     try {
-      _currentPage++;
+      final nextPage = _currentPage + 1;  // Calculate, don't increment yet!
       final newCases = await _getCases(
         _difficulty,
-        page:     _currentPage,
+        page: nextPage,
         pageSize: _pageSize,
       );
- 
-      if (isClosed) return;
- 
+
+      if (isClosed) return;  // Check after API call
+
+      _currentPage = nextPage;  // Only update on success
       final allCases = [...current.cases, ...newCases];
- 
+
       emit(current.copyWith(
-        cases:         allCases,
+        cases: allCases,
         isLoadingMore: false,
-        hasMore:       newCases.length == _pageSize,
+        hasMore: newCases.length == _pageSize,
       ));
     } catch (e) {
-      _currentPage--; // rollback عشان يعيد المحاولة
       if (!isClosed) {
         emit(current.copyWith(isLoadingMore: false));
       }
@@ -103,7 +103,7 @@ class CasesListCubit extends Cubit<CasesListState> {
       _isFetching = false;
     }
   }
- 
+
   // ── Unlock case temporarily ───────────────────────────────────────────────
  
   void unlockCaseTemporarily(String caseId) {
@@ -116,4 +116,3 @@ class CasesListCubit extends Cubit<CasesListState> {
   bool canOpen(int totalScore, CaseEntity c) =>
       _canOpenCase(totalScore: totalScore, caseEntity: c);
 }
- 

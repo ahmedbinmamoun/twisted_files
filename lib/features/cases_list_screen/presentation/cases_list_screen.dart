@@ -27,6 +27,7 @@ class CasesListScreen extends StatefulWidget {
 class _CasesListScreenState extends State<CasesListScreen> {
   final ScrollController _scrollController = ScrollController();
   late String _difficulty;
+  late CasesListCubit    _cubit; 
  
   @override
   void initState() {
@@ -47,7 +48,7 @@ class _CasesListScreenState extends State<CasesListScreen> {
     final max     = _scrollController.position.maxScrollExtent;
     final current = _scrollController.position.pixels;
     if (current >= max * 0.8) {
-      context.read<CasesListCubit>().loadMore();
+      _cubit.loadMore(); 
     }
   }
  
@@ -96,7 +97,6 @@ class _CasesListScreenState extends State<CasesListScreen> {
  
     AppDialog.show(
       ctx,
-      imagePath:          AppAssets.detectiveIcon,
       title:              'Case Locked 🔒',
       summary:            'You need $requiredScore points to unlock this case.\n\nWatch a short ad to unlock it for free!',
       barrierDismissible: true,
@@ -141,11 +141,15 @@ class _CasesListScreenState extends State<CasesListScreen> {
     _difficulty = ModalRoute.of(context)!.settings.arguments as String;
  
     return BlocProvider(
-      create: (_) => CasesListCubit(
-        getCases:        getIt<GetCasesByDifficultyUseCase>(),
-        canOpenCase:     getIt<CanOpenCaseUseCase>(),
-        scoreRepository: getIt<ScoreRepository>(),
-      )..loadCases(_difficulty),
+      create: (_) {
+        // ← احفظ الـ cubit هنا
+        _cubit = CasesListCubit(
+          getCases:        getIt<GetCasesByDifficultyUseCase>(),
+          canOpenCase:     getIt<CanOpenCaseUseCase>(),
+          scoreRepository: getIt<ScoreRepository>(),
+        )..loadCases(_difficulty);
+        return _cubit;
+      },
       child: Stack(
         children: [
           // ── Background ───────────────────────────────────────────────────
