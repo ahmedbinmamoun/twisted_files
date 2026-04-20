@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:twisted_files/core/constants/app_assets.dart';
 import 'package:twisted_files/core/di/injection_container.dart';
 import 'package:twisted_files/features/cases_list_screen/domain/entities/case_entity.dart';
 import 'package:twisted_files/features/common/widgets/app_dialog.dart';
@@ -50,7 +49,6 @@ class InvestigationQuestionsScreen extends StatelessWidget {
     getIt<ScoreViewModel>().startCaseSession(caseEntity.id);
 
     return BlocProvider(
-      // ← أضف totalQuestions
       create: (_) => QuestionsCubit(totalQuestions: caseEntity.questions.length),
       child: Builder(
         builder: (ctx) => WillPopScope(

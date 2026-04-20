@@ -9,7 +9,6 @@ import 'package:twisted_files/features/common/widgets/a4/a4_section_title.dart';
 import 'package:twisted_files/features/notes/presentation/notes_fab.dart';
 
 /// SRP: Only displays details for a single evidence or suspect item.
-/// No ViewModel needed — all data is passed directly (pure display).
 class EvidenceDetailsScreen extends StatelessWidget {
   final CaseEntity caseEntity;
   final bool isSuspect;

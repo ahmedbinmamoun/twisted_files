@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:twisted_files/core/constants/app_assets.dart';
 import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
 import 'package:twisted_files/features/cases_list_screen/domain/entities/suspect_entity.dart';
@@ -33,7 +32,7 @@ class _ChooseSuspectViewState extends State<ChooseSuspectView> {
   Widget build(BuildContext context) {
     return BlocConsumer<ChooseSuspectCubit, ChooseSuspectState>(
       listener: (ctx, state) async {
-        // ── عرض نتيجة القضية ─────────────────────────────────────────────
+        // ── Result ─────────────────────────────────────────────
         if (state is ChooseSuspectDone) {
           await showDialog(
             context: ctx,
@@ -65,7 +64,6 @@ class _ChooseSuspectViewState extends State<ChooseSuspectView> {
 
         return Stack(
           children: [
-            // ── قائمة المشتبه بهم ──────────────────────────────────────────
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -91,7 +89,6 @@ class _ChooseSuspectViewState extends State<ChooseSuspectView> {
                       shake: _shake && isSelected && !isCorrect && !isLoading,
                       child: PrimaryButton(
                         borderColor: borderColor,
-                        // لو شغال loading في الزر ده — اعرض spinner
                         useWidget: isThisLoading,
                         widget: isThisLoading
                             ? Row(
@@ -115,7 +112,7 @@ class _ChooseSuspectViewState extends State<ChooseSuspectView> {
                             : null,
                         text: isThisLoading ? null : suspect.name,
                         onPressed: isLoading
-                            ? null // disable كل الأزرار أثناء الـ loading
+                            ? null 
                             : () async {
                                 setState(() {
                                   _selectedId = suspect.id;
@@ -137,7 +134,6 @@ class _ChooseSuspectViewState extends State<ChooseSuspectView> {
               ],
             ),
 
-            // ── Overlay شفاف أثناء الـ loading (يمنع أي interaction) ───────
             if (isLoading)
               Positioned.fill(
                 child: AbsorbPointer(

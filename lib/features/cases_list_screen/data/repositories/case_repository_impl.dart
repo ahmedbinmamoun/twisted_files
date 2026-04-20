@@ -29,7 +29,6 @@ Future<List<CaseEntity>> getCasesByDifficulty(
       .where((m) => m.difficulty == difficulty)
       .toList();
 
-  // pagination يدوي على الـ local list
   final from = page * pageSize;
   if (from >= filtered.length) return [];
   final to = (from + pageSize).clamp(0, filtered.length);

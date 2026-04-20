@@ -8,7 +8,6 @@ import 'package:twisted_files/features/questions_screen/presentation/choose_susp
 import 'package:twisted_files/features/rank_screen/domain/use_cases/get_user_rank_use_case.dart';
 import 'package:twisted_files/features/score/presentation/score_view_model.dart';
 
-/// Widget خارجي — يوفر الـ BlocProvider للـ ChooseSuspectCubit
 class ChooseSuspectWidget extends StatelessWidget {
   final List<SuspectEntity> suspects;
   final CaseEntity          caseEntity;

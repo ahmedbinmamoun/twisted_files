@@ -37,7 +37,6 @@ class QuestionsView extends StatelessWidget {
               padding: EdgeInsets.all(16.w),
               child: BlocBuilder<QuestionsCubit, QuestionsState>(
                 builder: (_, state) {
-                  // ── انتهت الأسئلة — اختر المشتبه به ─────────────────────
                   if (state is QuestionsFinished) {
                     return ChooseSuspectWidget(
                       suspects:   caseEntity.suspects,
@@ -45,7 +44,6 @@ class QuestionsView extends StatelessWidget {
                     );
                   }
 
-                  // ── أسئلة ─────────────────────────────────────────────────
                   if (state is QuestionsAnswering) {
                     final index = state.index;
                     return AnimatedQuestion(

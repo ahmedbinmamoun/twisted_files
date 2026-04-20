@@ -5,7 +5,6 @@ import 'package:twisted_files/features/rank_screen/domain/use_cases/get_user_ran
 import 'package:twisted_files/features/score/domain/repositories/score_repository.dart';
 import 'profile_state.dart';
 
-/// SRP: كل لوجيك صفحة البروفايل هنا — الـ UI لا تعرف أي منطق.
 class ProfileCubit extends Cubit<ProfileState> {
   final ScoreRepository        _scoreRepository;
   final GetProfileStatsUseCase _getStats;
@@ -49,7 +48,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   // ── Nickname update ───────────────────────────────────────────────────────
 
-  /// كل لوجيك تغيير الاسم هنا — الـ UI بس بتستمع للـ state
   Future<void> saveNickname(String name) async {
     final trimmed = name.trim();
 
@@ -92,7 +90,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  /// reset حالة الـ nickname بعد إغلاق الـ dialog
   void resetNicknameStatus() {
     if (!isClosed) {
       emit(state.copyWith(

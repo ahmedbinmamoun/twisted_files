@@ -4,7 +4,6 @@ import 'package:twisted_files/core/constants/app_assets.dart';
 import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
 
-/// زر واحد في الـ dialog
 class AppDialogAction {
   final String label;
   final VoidCallback onPressed;
@@ -17,21 +16,7 @@ class AppDialogAction {
   });
 }
 
-/// Custom Dialog قابل للاستخدام في كل التطبيق
-///
-/// الاستخدام:
-/// ```dart
-/// AppDialog.show(
-///   context,
-///   imagePath: AppAssets.caseClosedSticker,
-///   title:     'Re-Investigation',
-///   summary:   'This will reset your score.',
-///   actions: [
-///     AppDialogAction(label: 'Cancel',  onPressed: () => Navigator.pop(context)),
-///     AppDialogAction(label: 'Confirm', isPrimary: true, onPressed: () { ... }),
-///   ],
-/// );
-/// ```
+
 class AppDialog extends StatelessWidget {
   final String imagePath;
   final bool isNetworkImage;
@@ -52,7 +37,7 @@ class AppDialog extends StatelessWidget {
     this.barrierDismissible = true,
   });
 
-  /// Static helper — اعرض الـ dialog من أي مكان
+  /// Static helper 
   static Future<void> show(
     BuildContext context, {
      String imagePath = AppAssets.boardImage,
@@ -96,7 +81,7 @@ class AppDialog extends StatelessWidget {
   }
 }
 
-// ── الـ Card الداخلية ─────────────────────────────────────────────────────────
+// ──  Card الداخلية ─────────────────────────────────────────────────────────
 class _DialogCard extends StatelessWidget {
   final String imagePath;
   final bool isNetworkImage;
@@ -121,14 +106,12 @@ class _DialogCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // ── النصف الفوقاني — الصورة ──────────────────────────────────────
           _ImageSection(
             imagePath: imagePath,
             isNetworkImage: isNetworkImage,
             height: imageHeight,
           ),
 
-          // ── النصف التحتاني — المحتوى ─────────────────────────────────────
           Container(
             width: double.infinity,
             padding: EdgeInsets.fromLTRB(20.w, 24.h, 20.w, 20.h),
@@ -136,7 +119,7 @@ class _DialogCard extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // العنوان
+                // Tittle
                 Text(
                   title,
                   textAlign: TextAlign.center,
@@ -145,7 +128,7 @@ class _DialogCard extends StatelessWidget {
                   ),
                 ),
 
-                // الـ summary
+                //  summary
                 if (summary != null && summary!.isNotEmpty) ...[
                   SizedBox(height: 10.h),
                   Text(
@@ -160,7 +143,7 @@ class _DialogCard extends StatelessWidget {
 
                 SizedBox(height: 24.h),
 
-                // الأزرار
+                // Buttons
                 _ActionsSection(actions: actions),
               ],
             ),
@@ -171,7 +154,7 @@ class _DialogCard extends StatelessWidget {
   }
 }
 
-// ── قسم الصورة ───────────────────────────────────────────────────────────────
+// ──  Image Section ───────────────────────────────────────────────────────────────
 class _ImageSection extends StatelessWidget {
   final String imagePath;
   final bool isNetworkImage;
@@ -214,7 +197,7 @@ class _ImageSection extends StatelessWidget {
       );
 }
 
-// ── قسم الأزرار ──────────────────────────────────────────────────────────────
+// ──  Buttons Section ──────────────────────────────────────────────────────────────
 class _ActionsSection extends StatelessWidget {
   final List<AppDialogAction> actions;
   const _ActionsSection({required this.actions});
@@ -223,12 +206,12 @@ class _ActionsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     if (actions.isEmpty) return const SizedBox.shrink();
 
-    // زر واحد → عرض كامل
+    // One Button
     if (actions.length == 1) {
       return _buildButton(actions.first, fullWidth: true);
     }
 
-    // زرين أو أكثر → صف أفقي
+    // Two or more Buttons
     return Row(
       children: actions.asMap().entries.map((entry) {
         final isLast = entry.key == actions.length - 1;

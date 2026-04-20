@@ -37,35 +37,7 @@ class CaseRemoteDataSource {
     return model;
   }
  
-  // Future<List<CaseModel>> loadCasesByDifficulty(String difficulty) async {
-  //   if (_difficultyCache.containsKey(difficulty)) {
-  //     if (kDebugMode) print('📦 cache hit: difficulty=$difficulty');
-  //     return _difficultyCache[difficulty]!;
-  //   }
- 
-  //   if (kDebugMode) print('🌐 fetching cases difficulty=$difficulty from Supabase');
-  //   final res = await _client
-  //       .from('cases')
-  //       .select('data')
-  //       .filter('data->>difficulty', 'eq', difficulty);
- 
-  //   final models = (res as List)
-  //       .map((e) => CaseModel.fromJson(
-  //             Map<String, dynamic>.from(e['data'] as Map),
-  //           ))
-  //       .toList();
- 
-  //   _difficultyCache[difficulty] = models; 
- 
-  //   // أضف كل قضية في الـ case cache كمان عشان loadCase تستفيد
-  //   for (final m in models) {
-  //     _caseCache[m.id] = m;
-  //   }
- 
-  //   return models;
-  // }
-
-  // غيّر الـ cache key يشمل الـ page
+  
 Future<List<CaseModel>> loadCasesByDifficulty(
   String difficulty, {
   int page     = 0,

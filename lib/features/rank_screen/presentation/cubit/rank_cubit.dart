@@ -10,15 +10,15 @@ class RankCubit extends Cubit<RankState> {
         super(RankLoading());
 
   Future<void> load() async {
-  if (isClosed) return; // ← أضف في الأول
+  if (isClosed) return; 
   emit(RankLoading());
   try {
     final entries = await _getLeaderboard();
-    if (isClosed) return; // ← أضف قبل emit
+    if (isClosed) return; 
     final myEntry = entries.where((e) => e.isCurrentUser).firstOrNull;
     emit(RankLoaded(entries: entries, currentUserEntry: myEntry));
   } catch (e) {
-    if (isClosed) return; // ← أضف
+    if (isClosed) return; 
     emit(RankError(e.toString()));
   }
 }

@@ -44,11 +44,9 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
   bool _showHint  = false;
   bool _adLoading = false;
 
-  /// عداد static يتراكم عبر كل أسئلة القضية الواحدة
   static int       _hintUsedCount = 0;
   static const int _freeHints     = 3;
 
-  /// استدعيها من InvestigationQuestionsScreen عند بدء قضية جديدة
   static void resetHintCount() => _hintUsedCount = 0;
 
   // ── Audio ─────────────────────────────────────────────────────────────────────
@@ -77,20 +75,17 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
   // ── Hint logic ────────────────────────────────────────────────────────────────
 
   void _onHintTap() {
-    // toggle
     if (_showHint) {
       setState(() => _showHint = false);
       return;
     }
 
-    // أول 3 مجانية
     if (_hintUsedCount < _freeHints) {
       _hintUsedCount++;
       setState(() => _showHint = true);
       return;
     }
 
-    // بعد الـ 3 — يشوف ad
     setState(() => _adLoading = true);
 
     getIt<RewardedAdService>().showAd(
@@ -98,7 +93,6 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
         if (mounted) setState(() { _showHint = true; _adLoading = false; });
       },
       onNotReady: () {
-        // ad مش جاهزة — امنح الـ hint مجاناً
         if (mounted) setState(() { _showHint = true; _adLoading = false; });
       },
     );

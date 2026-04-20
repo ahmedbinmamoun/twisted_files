@@ -4,7 +4,6 @@ import 'package:twisted_files/core/constants/app_assets.dart';
 import 'package:twisted_files/core/constants/app_colors.dart';
 import 'package:twisted_files/core/constants/app_style.dart';
 
-/// زر Google Sign-In — pure UI، لا لوجيك
 class GoogleSignInButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool          isLoading;

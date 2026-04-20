@@ -1,7 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twisted_files/features/notes/domain/repositories/notes_repository.dart';
 
-/// Implements NotesRepository directly (simple feature — no extra abstraction needed).
 class NotesLocalDataSource implements NotesRepository {
   String _key(String caseId) => 'notes_case_$caseId';
 

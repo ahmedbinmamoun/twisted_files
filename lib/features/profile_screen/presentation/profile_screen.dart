@@ -10,7 +10,6 @@ import 'package:twisted_files/features/common/widgets/app_loading.dart';
 import 'package:twisted_files/features/profile_screen/presentation/cubit/profile_cubit.dart';
 import 'package:twisted_files/features/profile_screen/presentation/cubit/profile_state.dart';
 import 'package:twisted_files/features/profile_screen/presentation/widgets/detective_card.dart';
-import 'package:twisted_files/features/profile_screen/presentation/widgets/google_sign_in_button.dart';
 import 'package:twisted_files/features/profile_screen/presentation/widgets/nickname_dialog.dart';
 import 'package:twisted_files/features/profile_screen/presentation/widgets/profile_header_widget.dart';
 import 'package:twisted_files/features/profile_screen/presentation/widgets/profile_stat_box.dart';

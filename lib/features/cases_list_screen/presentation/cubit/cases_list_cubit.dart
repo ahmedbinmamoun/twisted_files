@@ -11,7 +11,7 @@ class CasesListCubit extends Cubit<CasesListState> {
   final ScoreRepository             _scoreRepository;
  
   // ── Pagination config ─────────────────────────────────────────────────────
-  static const int _pageSize = 15; // عدد القضايا في كل صفحة
+  static const int _pageSize = 15; 
  
   String          _difficulty = '';
   int             _currentPage = 0;
@@ -53,7 +53,6 @@ class CasesListCubit extends Cubit<CasesListState> {
       hasMore:          cases.length == _pageSize,
     ));
   } catch (e) {
-    // ← افرق بين no internet وغيره
     final isNoInternet = e.toString().toLowerCase().contains('socket') ||
         e.toString().toLowerCase().contains('network') ||
         e.toString().toLowerCase().contains('connection') ||
@@ -78,7 +77,7 @@ class CasesListCubit extends Cubit<CasesListState> {
     emit(current.copyWith(isLoadingMore: true));
 
     try {
-      final nextPage = _currentPage + 1;  // Calculate, don't increment yet!
+      final nextPage = _currentPage + 1;  
       final newCases = await _getCases(
         _difficulty,
         page: nextPage,

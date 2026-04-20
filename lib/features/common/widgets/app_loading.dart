@@ -3,22 +3,10 @@ import 'package:lottie/lottie.dart';
 import 'package:twisted_files/core/constants/app_assets.dart';
 import 'package:twisted_files/core/constants/app_colors.dart';
 
-/// Widget الـ loading الموحد للتطبيق كله
-///
-/// الاستخدام:
-/// ```dart
-/// // بدل CircularProgressIndicator()
-/// const AppLoading()
-///
-/// // مع خلفية كاملة (زي Scaffold)
-/// const AppLoading(fullScreen: true)
-///
-/// // حجم مخصص
-/// AppLoading(size: 150)
-/// ```
+
 class AppLoading extends StatelessWidget {
-  final bool   fullScreen; // true = يملأ الشاشة كاملة
-  final double size;        // حجم الـ lottie
+  final bool   fullScreen; 
+  final double size;      
   final Color? backgroundColor;
 
   const AppLoading({

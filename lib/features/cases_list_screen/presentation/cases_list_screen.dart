@@ -57,7 +57,6 @@ class _CasesListScreenState extends State<CasesListScreen> {
   void _showErrorDialog(BuildContext ctx, String message) {
     final isNoInternet = message == 'no_internet';
  
-    // addPostFrameCallback عشان ما يحصلش conflict مع الـ build cycle
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       AppDialog.show(
@@ -142,7 +141,6 @@ class _CasesListScreenState extends State<CasesListScreen> {
  
     return BlocProvider(
       create: (_) {
-        // ← احفظ الـ cubit هنا
         _cubit = CasesListCubit(
           getCases:        getIt<GetCasesByDifficultyUseCase>(),
           canOpenCase:     getIt<CanOpenCaseUseCase>(),
@@ -170,14 +168,14 @@ class _CasesListScreenState extends State<CasesListScreen> {
               padding: EdgeInsets.symmetric(horizontal: 15.w),
               child: BlocConsumer<CasesListCubit, CasesListState>(
  
-                // ── Listener — side effects فقط ──────────────────────────
+                // ── Listener — side effects  ──────────────────────────
                 listener: (ctx, state) {
                   if (state is CasesListError) {
                     _showErrorDialog(ctx, state.message);
                   }
                 },
  
-                // ── Builder — UI فقط ─────────────────────────────────────
+                // ── Builder — UI  ─────────────────────────────────────
                 builder: (ctx, state) {
  
                   // First load
@@ -186,7 +184,6 @@ class _CasesListScreenState extends State<CasesListScreen> {
                   }
  
                   // Error — الـ dialog بيتعرض في الـ listener
-                  // بس نحط loading بدل ما نسيب الشاشة فاضية
                   if (state is CasesListError) {
                     return const AppLoading();
                   }

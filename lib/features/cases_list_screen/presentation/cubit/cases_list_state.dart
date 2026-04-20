@@ -9,8 +9,8 @@ class CasesListLoaded extends CasesListState {
   final List<CaseEntity> cases;
   final Set<String>      completedCaseIds;
   final Set<String>      unlockedCaseIds;
-  final bool             isLoadingMore; // جاري تحميل صفحة جديدة
-  final bool             hasMore;       // في صفحات تانية
+  final bool             isLoadingMore; 
+  final bool             hasMore;       
  
   CasesListLoaded(
     this.cases, {

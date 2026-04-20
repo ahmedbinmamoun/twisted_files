@@ -1,6 +1,5 @@
 import 'package:twisted_files/features/profile_screen/domain/entities/profile_stats_entity.dart';
 
-/// حالات تحديث الـ nickname
 enum NicknameStatus { idle, loading, success, taken, tooShort }
 
 class ProfileState {

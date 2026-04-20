@@ -41,10 +41,9 @@ class _NicknameDialogState extends State<NicknameDialog> {
           prev.nicknameStatus != curr.nicknameStatus,
       listener: (ctx, state) {
         if (state.nicknameStatus == NicknameStatus.success) {
-          // ── اعمل update للـ AuthCubit بالاسم الجديد ────────────────────
           ctx.read<AuthCubit>().updateNickname(_controller.text.trim());
 
-          // ── اعرض الـ ad بعد تغيير الاسم ─────────────────────────────────
+          // ──  Ad   ─────────────────────────────────
           getIt<RewardedAdService>().showAd(onRewarded: () {});
 
           Navigator.pop(ctx);

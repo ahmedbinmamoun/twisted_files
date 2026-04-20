@@ -7,7 +7,6 @@ import 'package:twisted_files/features/rank_screen/domain/use_cases/get_user_ran
 import 'package:twisted_files/features/score/presentation/score_view_model.dart';
 import 'choose_suspect_state.dart';
 
-/// SRP: يدير فقط منطق اختيار المشتبه به وحساب النتيجة.
 class ChooseSuspectCubit extends Cubit<ChooseSuspectState> {
   final ScoreViewModel _scoreVm;
   final CaseEntity     _caseEntity;
@@ -23,7 +22,7 @@ class ChooseSuspectCubit extends Cubit<ChooseSuspectState> {
         super(const ChooseSuspectIdle());
 
   Future<void> selectSuspect(SuspectEntity suspect) async {
-    if (state is ChooseSuspectLoading) return; // منع double-tap
+    if (state is ChooseSuspectLoading) return;
     if (isClosed) return;
 
     emit(ChooseSuspectLoading(suspect));
@@ -32,18 +31,15 @@ class ChooseSuspectCubit extends Cubit<ChooseSuspectState> {
       final isCorrect =
           suspect.id.trim() == _caseEntity.correctSuspectId.trim();
 
-      // حساب نقاط المشتبه به
       if (isCorrect) {
       await _scoreVm.solveSuspect(_caseEntity);
     }
 
-      // احفظ session stats قبل finalizeCase (بيعمل reset ليهم)
       final sessionSolved    = _scoreVm.sessionSolvedCount;
       final sessionQPts      = _scoreVm.sessionQuestionGross;
       final sessionPenalty   = _scoreVm.sessionPenalty;
       final sessionSuspect   = isCorrect ? _scoreVm.sessionSuspectGross : 0;
 
-      // احفظ النتيجة في Supabase
       await _scoreVm.finalizeCase(_caseEntity,isCorrect: isCorrect);
 
       final rank = await _getUserRank();
