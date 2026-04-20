@@ -4,7 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 RewardedAd? _rewardedAd;
 
-String rewardedAdUnitId = 'ca-app-pub-2435311949965691/2679768374';
+String rewardedAdUnitId = 'ca-app-pub-1839430517523354/6551642690';
 
 void loadRewardedAd(){
   RewardedAd.load(

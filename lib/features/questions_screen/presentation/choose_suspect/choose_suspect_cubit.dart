@@ -33,16 +33,18 @@ class ChooseSuspectCubit extends Cubit<ChooseSuspectState> {
           suspect.id.trim() == _caseEntity.correctSuspectId.trim();
 
       // حساب نقاط المشتبه به
+      if (isCorrect) {
       await _scoreVm.solveSuspect(_caseEntity);
+    }
 
       // احفظ session stats قبل finalizeCase (بيعمل reset ليهم)
       final sessionSolved    = _scoreVm.sessionSolvedCount;
       final sessionQPts      = _scoreVm.sessionQuestionGross;
       final sessionPenalty   = _scoreVm.sessionPenalty;
-      final sessionSuspect   = _scoreVm.sessionSuspectGross;
+      final sessionSuspect   = isCorrect ? _scoreVm.sessionSuspectGross : 0;
 
       // احفظ النتيجة في Supabase
-      await _scoreVm.finalizeCase(_caseEntity);
+      await _scoreVm.finalizeCase(_caseEntity,isCorrect: isCorrect);
 
       final rank = await _getUserRank();
 

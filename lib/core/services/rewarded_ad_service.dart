@@ -4,7 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 /// SRP: مسؤول فقط عن تحميل وعرض الـ Rewarded Ad.
 /// استخدمه من أي مكان في التطبيق عبر getIt.
 class RewardedAdService {
-  static const String _adUnitId = 'ca-app-pub-2435311949965691/2679768374';
+  static const String _adUnitId = 'ca-app-pub-1839430517523354/6551642690';
  
   RewardedAd? _rewardedAd;
   bool        _isLoading = false;

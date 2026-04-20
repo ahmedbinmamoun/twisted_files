@@ -98,7 +98,8 @@ class ScoreViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> finalizeCase(CaseEntity caseEntity) async {
+  Future<void> finalizeCase(CaseEntity caseEntity, {bool isCorrect = true}) async {
+    if (!isCorrect) _sessionSuspectGross = 0;
     final sessionGain = (_sessionQuestionGross - _sessionPenalty + _sessionSuspectGross)
         .clamp(0, double.infinity).toInt();
     final saved          = await _repository.getScore();

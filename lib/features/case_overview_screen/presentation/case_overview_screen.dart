@@ -18,6 +18,7 @@ import 'package:twisted_files/features/common/widgets/primary_button.dart';
 import 'package:twisted_files/features/evidence_list_screen/presentation/evidence_list_screen.dart';
 import 'package:twisted_files/features/notes/presentation/notes_fab.dart';
 import 'package:twisted_files/features/score/domain/repositories/score_repository.dart';
+import 'package:twisted_files/features/score/presentation/score_view_model.dart';
 
 class CaseOverviewScreen extends StatelessWidget {
   final String caseId;
@@ -30,6 +31,7 @@ class CaseOverviewScreen extends StatelessWidget {
         getCase: getIt<GetCaseUseCase>(),
         resetCase: getIt<ResetCaseUseCase>(),
         scoreRepository: getIt<ScoreRepository>(),
+        scoreViewModel:  getIt<ScoreViewModel>(),
         caseId: caseId,
       )..load(),
       child: BlocBuilder<CaseOverviewCubit, CaseOverviewState>(
